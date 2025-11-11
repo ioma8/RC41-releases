@@ -1,0 +1,94 @@
+    General
+Done	PACK - Revisit, not packing nulls between programs
+Done    PASN - need to use correct keycodes
+		SIZE - Does not work correctly executed in a program
+		BS   - Do not clear X register if flag 50 is set, just clear flag
+
+	Alpha Mode
+done	ASTO
+done	ARCL
+done	CLA
+done	correction key
+		AVIEW
+
+	Direct mode
+done	ASN
+done	CAT 1
+done	CAT 2
+done	CAT 3
+done	CLP
+done	GTO .___
+done	GTO .alpha
+done	GTO alpha
+done	GTO __
+done	GTO IND __
+done	PRP
+done	XEQ alpha
+done	XEQ __
+done	XEQ IND
+done	SST to execute next program line
+done	SST/BST/RS in CAT mode
+        SIZE - take a look at, may not be working correctly
+
+	User mode
+done	base command with no args
+done	base command with args
+done	base command needing args
+done	peripheral command
+done	programs
+		A-J should execute LBL A through LBL J if unassigned
+
+	Running
+		PSE
+done	R/S stops program execution
+done	R/S restore direct mode display when program stops
+
+	Correction key
+done	Direct number entry
+done	Alpha mode
+done	Program mode number entry
+done	Program mode alpha entry
+done	Program mode delete line
+done	Numeric arg entry
+done	Alpha arg entry
+done	During ASN
+
+	Program Mode
+done	SST
+done	BST
+done	DEL
+done	ASTO from alpha mode
+done	ARCL from alpha mode
+done	CLA from alpha mode
+done	AVIEW from alpha mode
+done	Number entry
+done	Alpha entry
+done	Print button inserting PRX/PRA
+done	Adv button inserting ADV
+		Q-Loader
+done	LBL A-J,a-e
+done	GTO A-J,a-e
+done	XEQ A-J,a-e
+
+	Tape Drive
+done	DIR   - Dir shows in alpha display
+		DIR fix bug where NONEXISTENT is briefly displayed
+done	NEWM
+
+	Printer
+done	Print to file
+done    PRP should print current program if <alpha><alpha> is pressed
+done	PRREG and PRREGX should print alpha data in quotes
+done	LIST prompts for number of lines, then prints from current program,line specified number of lines
+		Trace in direct mode
+		Trace while executing program
+done	PRA prints lowercase when flag 13 is set
+done	PRX prints lowercase when X is alpha data and flag 13 is set
+done	ACX accumulates lowercase when X is alpha data and flag 13 is set
+done	ACA accumulates lowercase if flag 13 is set
+done	Flag 13 should not affect PRBUF
+        Double width
+done	justification when printing in non dot-matrix mode
+done	character translations in text mode
+
+done    Scrolling LCD when message longer than 12 characters

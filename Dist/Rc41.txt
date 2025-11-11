@@ -1,0 +1,1092 @@
+Hardware
+  HP41CV
+  82132A - Printer
+  82104A - Card Reader
+  82161A - Tape drive (with needed 82160A IL)
+  82180A - Extended Functions/Memory
+  82182A - Time Module
+
+Catalog 2 - Peripheral Functions
+Card Reader Commands
+  RDTA    Read data from card
+  RDTAX   Read data from card according to X (bbb.eee)
+  VER     Verify card
+  WALL    Write all to cards
+  WDTA    Write data to card
+  WDTAX   Write data to card according to X (bbb.eee)
+  WSTS    Write status registers to card
+  7CLREG  Clear P0-P9,A-E,I (R00-R09,R20-R25)
+  7DSP0   Set display to 0 decimal places
+  7DSP1   Set display to 1 decimal places
+  7DSP2   Set display to 2 decimal places
+  7DSP3   Set display to 3 decimal places
+  7DSP4   Set display to 4 decimal places
+  7DSP5   Set display to 5 decimal places
+  7DSP6   Set display to 6 decimal places
+  7DSP7   Set display to 7 decimal places
+  7DSP8   Set display to 8 decimal places
+  7DSP9   Set display to 9 decimal places
+  7DSPI   Set decimal places to value stored in I (R25)
+  7DSZ    Decrement I and skip on zero
+  7DSZI   Decrement I indirect and skip on zero
+  7ENG    Set display to engineering mode
+  7FIX    Set display to fixes mode
+  7ISZ    Increment I and skip on zero
+  7ISZI   Increment I indirect and skip on zero
+  7P<>S   Exchange primary and secondary registers
+  7SCI    Set display to scientific mode
+
+Extended Functions Commands
+  ALENG      Length of Alpha register
+  ANUM       Retrieve number from Alpha register
+  APPCHR     Append Alpha register to current record
+  APPREC     Append Alpha register to current ascii file
+  ARCLREC    Append record to Alpha register
+  AROT       Rotate Alpha register
+  ATOX       Leftmost character of Alpha shifted out to X
+  CLFL       Clear file
+  CLKEYS     Clear all key assignments
+  CRFLAS     Create ascii file
+  CRFLD      Create data file
+  DELCHR     Delete characters from current pointer in ascii fil
+  DELREC     Delete current record
+  EMDIR      Directory of extended memory
+  FLSIZE     Size of specified file in X
+  GETAS      Get ascii file from tape
+  GETP       Get program from extended memory, replace last program in main memory
+  GETR       Get all data registers from data file
+  GETREC     Get record from ascii file
+  GETRX      Get data registers from file according to X
+  GETSUB     Get program from extended memory to end of main memory
+  GETX       Get X from data file
+  INSCHR     Insert Alpha register at current character position
+  INSREC     Insert record before current record
+  PASN       Programmable key assignment
+  PCLPS      Delete specified program to end of main memory
+  POSA       Position of charater/string in alpha register
+  POSFL      Search file for string in Alpha
+  PSIZE      Programmable SIZE
+  PURFL      Purge file from extended memory
+  RCLFLAG    Recall flags 00-43
+  RCLPT      Recall current file pointer
+  RCLPTA     Set working file and recall pointers
+  REGMOVE    Copy data registers (X=sss.dddnnn)
+  REGSWAP    Swap block of registers (X=sss.dddnnn)
+  SAVEAS     Save Ascii file to tape
+  SAVEP      Save program to extended memory
+  SAVER      Save all data registers to file
+  SAVERX     Save registers according to X to file
+  SAVEX      Save X to data file
+  SEEKPT     Position pointer in currect data file
+  SEEKPTA    Position pointer in named data file
+  SIZE?      Get current SIZE value
+  STOFLAG    Store flags 00-43 (or X=bb.ee, Y=flags)
+  X<>F       Exchange X with Flags 0-7
+  XTOA       Append string/char in X to Alpha
+
+TimeModule
+  ADATE      Append date to alpha register
+  ATIME      Append time to alpha register
+  ATIME24    Append time in 24 hour format to alpha register
+  CLK12      Set clock to 12 hour mode
+  CLK24      Set clock to 24 hour mode
+  CLKT       Set clock display to time only
+  CLKTD      Set clock display to time/date
+  CLOCK      Activate clock mode
+  CORRECT    Set time and auto set accuracy factor
+  DATE       Get current Date into X
+  DATE+      Add X days to date Y
+  DDAYS      Days between dates
+  DOW        Get day of week for date in X
+  DMY        Det Day Month Year format
+  MDY        Set Month Day Year format
+  RCLAF      Recall accuracy factor
+  RCLSW      Recaall current stopwatch value
+  RUNSW      Start halted stopwatch
+  SETAF      Set accuracy factor
+  SETDATE    Set current date
+  SETIME     Set current time
+  SETSW      Set stopwatch time
+  STOPSW     Stop the stopwatch
+  SW         Activate stopwatch mode
+  T+X        Adjust current time
+  TIME       Get current Time into X
+Note: The simulation uses the host computer clock, so RCLAF will always
+      return 0, and SETAF will be ignored
+
+Printer Commands
+  ACA        Accumulate alpha register to print buffer
+  ACCHR      Accumulate ascii character of X to print buffer (EX. 65='A')
+  ACCOL      Accumulate column
+  ACSPEC     Accumulate special character
+  ACX        Accumulate numeric value of X to print buffer
+  BLDSPEC    Build special character
+  LIST       List program lines
+  PRA        Print alpha register
+  PRBUF      Print and clear print buffer
+  PRE        Print statistic registers
+  PRFLAGS    Print flags
+  PRKEYS     Print user mode key assignments
+  PRP "name" Print Program
+  PRREG      Print all registers
+  PRREGX     Print registers according to X (bbb.eee)
+  PRSTK      Print stack
+  PRX        Print X register
+  SKPCHR     Accumulate X spaces to print buffer
+  SKPCOL     Accumulate X blank columns to printe buffer
+
+Tape Drive commands
+  CREATE     Create data file (*1)
+  DIR        Display directory of tape
+  NEWM ___   Initialize media, prompts for dir entries (8-447)
+  PURGE      Delete a file (*2)
+  READA      Read all from file (*2)
+  READK      Read key assignments from file (*2)
+  READP      Read program from tape (*2)
+  READR      Read data registers from file (*2)
+  READRX     Read data from file according to X (*3)
+  READS      Read calculator status from file (*2)
+  READSUB    Read program from tape (*2)
+  RENAME     Rename a file (*4)
+  SEC        Mark file as secured (read only)(*2)
+  SEEKR      Set current data pointer for data read/write (*5)
+  UNSEC      Unsecure file (read/write)(*2)
+  VERIFY     Verify file (*2)
+  WRTA       Write all to file (*2)
+  WRTK       Write key assignments to file (*2)
+  WRTP       Write program to file (*6)
+  WRTPV      Write program to file as private (*6) Not currently supported
+  WRTR       Write data registers to file (file must exist)(*2)
+  WRTRX      Write data registers to file according to X (*3)
+  WRTS       Write calculator status to file (*2)
+  ZERO       Zero all registers in file (*2)
+  *1 Alpha=filename, X=size is registers
+  *2 Alpha=filename
+  *3 X=bbb.eee (File must have been positioned before this call)
+  *4 Alpha=oldname,newname
+  *5 Alpha=filename, X=register position
+  *6 Alpha=prgmname,filename OR Alpha=prgmname OR Alpha=,filename
+
+Catalog 3 - Standard Functions
++         Addition operator
+-         Subtraction operator
+*         Multiplication operator
+/         Division operator
+1/X       Reciprical
+10^X      Common antilogarithm
+ABS       Absolute value
+ACOS      Arccosine
+ADV
+AOFF      Alpha mode off
+AON       Alpha mode on
+ARCL __   Alpha recall
+ASHF      Alpha shift
+ASIN      Arcsine
+ASN       Assign key
+ASTO __   Alpha store
+ATAN      Arctangent
+AVIEW     Alpha view
+BEEP      beep
+BST       Backstep
+CAT _     Catalog
+CF __     Clear flag
+CHS       Change sign
+CLA       Clear alpha
+CLD       Clear display
+CLE       Clear statistics registers
+CLP       Clear program
+CLRG      Clear registers
+CLST      Clear stack
+CLX       Clear X register
+COS       Cosine
+D-R       Degrees to radians
+DEC       Octal to decimal conversion
+DEG       Degrees mode
+DEL ___   Delete program lines
+DSE __    Decrement, skip if equal
+E^X       Natural antilogarithm
+E^X-1     Natural antilogarithm for arguments close to 0
+END       End program
+ENG _     Engineering notation
+ENTER^    Push X
+FACT      Factorial
+FC? __    Flag clear test
+FC?C __   Flag clear test and clear
+FIX _     Fixed point display
+FRC       Fractional portion of number
+FS? __    Flag set test
+FS?C __   Flag set and clear
+GRAD      Gradians mode
+GTO __    Go to label
+HMS       Decimal hours to hours/minutes/seconds
+HMS+      Hours/minutes/seconds addition
+HMS-      Hours/minutes/seconds subtraction
+HR        Hours/minutes/seconds to decimal hours
+INT       Integer portion of number
+ISG __    Increment, skip of greater
+LASTX     Recall last X register to X register
+LBL __    Program label
+LOG       Common logarithm
+LN        Natural logarithm
+LN1+X     Natural logarithm for arguments close to 1
+MEAN      Statistical mean
+MOD       Modulo
+OCT       Convert decimal to octal
+OFF       Turn of calculator
+ON        -------------------------
+P-R       Polar to rectangular conversion
+PACK      Pack program memory
+%         Percent
+%CH       Percentage of change
+PI        The value of Pi
+PROMPT    Stop execution, show alpha register
+PSE       Pause (not implemented)
+R^        Roll up stack
+R-D       Radians to degrees conversion
+R-P       Rectangular to polar conversion
+RAD       Set radians mode
+RCL __    Recall from data register
+RDN       Roll down stack
+RND       Round
+RTN       Return from subroutine
+SDEV      Standard deviation
+SCI _     Set scientific display
+SF __     Set flag
+E+        Accumulations for statistics
+E-        Accumulations corrections
+EREG __   Select start of statistics registers
+SIN       sine
+SIGN      Sign of x
+SIZE ___  Set size for data registers
+SQRT      Square root
+SST       Single step
+ST+ __    Storage register addition
+ST- __    Storage register subtraction
+ST* __    Storage register multiplication
+ST/ __    Storage register division
+STO __    Store to data register
+STOP      Stop execution
+TAN       Tangent
+TONE _    Tone (does nothing)
+VIEW __   View data register
+X=0?      Conditional test for x equal 0
+X<>0?     Conditional test for x unequal 0
+X<0?      Conditional test for x less than 0
+X<=0?     Conditional test for x less than or equal to 0
+X>0?      Conditional test for x greater than 0
+X=Y?      Conditional test for x equals y
+X<>Y?     Conditional test for x unequal to y
+X<Y?      Conditional test for x less than y
+X<=Y?     Conditional test for x less than or equal to y
+X>Y?      Conditional test for x greater than y
+X<>       Exchange x with data register
+X<>Y      Exchange x and y
+XEQ __    Execute subroutine
+X^2       Square x
+Y^X       Y raised to the power of x
+
+HP41 -> Hp67/97
+ 00  -> P0
+ 01  -> P1
+ 02  -> P2
+ 03  -> P3
+ 04  -> P4
+ 05  -> P5
+ 06  -> P6
+ 07  -> P7
+ 08  -> P8
+ 09  -> P9
+ 10  -> S0
+ 11  -> S1
+ 12  -> S2
+ 13  -> S3
+ 14  -> S4 Sum X
+ 15  -> S5 Sum X^2
+ 16  -> S6 Sum Y
+ 17  -> S7 Sum Y^2
+ 18  -> S8 Sum XY
+ 19  -> S9 N
+ 20  -> A
+ 21  -> B
+ 22  -> C
+ 23  -> D
+ 24  -> E
+ 25  -> I
+
+Memory:
+      6   5   4   3   2   1   0
+    +---+---+---+---+---+---+---+
+1FF |       Top of memory       |
+    |                           |
+    |           Data            |
+    | R00                       | mno
+    +---------------------------+
+    |    First user program     |
+    |                           |
+    |                           |
+    |    Last user program      |
+    |          .END.            | pqr
+    +---------------------------+
+    |         Available         |
+    |                           |
+    +---------------------------+
+    |      Key assignments      |
+    |                           |
+0C0 +---------------------------+
+
+    +---------------------------+
+00F |      Status registers     |
+000 |                           |
+    +---------------------------+
+
+Status Registers:
+
+Status registers
+       6       5       4       3       2       1       0     R_     REG_
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+e  | shifted key assignments           |scratch|   line #  | 00F     105
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+d  |         user flags          |      system flags       | 00E      98
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+c  |   E reg   |scratch|   cold    |    R00    |   .END.   | 00D      91
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+b  |3rd ret|    2nd ret    |    1st ret    |    Adr Ptr    | 00C      84
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+a  |    6th ret    |    5th ret    |    4th ret    |3rd ret| 00B      77
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+|- | unshifted key assignments         |      scratch      | 00A      70
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+Q  |               Temporary alpha scratch                 | 009      63
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+P  |     scratch (alpha 25-28)     |      Alpha 22-24      | 008      56
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+O  |                     Alpha 15-21                       | 007      49
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+N  |                     Alpha  8-14                       | 006      42
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+M  |                     Alpha  1-7                        | 005      35
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+L  |                           L                           | 004      28
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+X  |                           X                           | 003      21
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+Y  |                           Y                           | 002      14
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+Z  |                           Z                           | 001       7
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+T  |                           T                           | 000       0
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+   |sgn| mantissa                              |sgn|  exp  |
+
+Flags:
+Flags
+00-10 - General purpose
+   11 - Automatic execution
+   12 - Printer double wide
+   13 - Printer lowercase
+   14 - Card reader overwrite
+   21 - Printer enable
+   22 - Numeric data input
+   23 - Alpha data input
+   24 - Range error ignore
+   25 - Ignore next error, error clears flag
+   26 - Audio enable
+   27 - User mode
+   28 - Decimal point, S=. C=,
+   29 - Digit grouping, C=no commas
+   30 - Catalog, always tests clear
+   31 - Date mode. S=DMY, C=MDY
+32-35 - Peripherals
+36-39 - Number of digits (fix, sci, eng) binary, 36=msb
+40-41 - Display format (fix=10, sci=00, eng=01) 40=msb
+   42 - Grads mode
+   43 - Radians mode
+   44 - Continuous on, set=no auto power off
+   45 - System data entry
+   46 - Partial key sequence
+   47 - Shift set
+   48 - Alpha mode
+   49 - Low battery
+   50 - Message (displaying error, or view/aview)
+   51 - SST
+   52 - Program mode
+   53 - I/O
+   54 - PSE, when set PAUSE is in progress
+   55 - Printer existance
+       6       5       4       3       2       1       0     R_     REG_
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+d  |0     0|0     1|1     2|2     3|3     3|4 4 4 4|4     5| 00E      98
+   |0     7|8     5|6     3|4     1|2     9|0 3 4 7|8     5| 00E      98
+   +---v---+---v---+---v---+---v---+---v---+---v---+---v---+
+
+
+
+Display symbol       Printer symbol           Command
+       L                                         R^
+       M                    [                    RDN
+       N                    \                    LASTX
+       O                    ]                    CLX
+       P                    ^                    X=Y?
+       Q                    _                    X<>Y?
+       |-                   T                    SIGN
+       a                                         X<=0?
+       b                                         MEAN
+       c                                         SDEV
+       d                                         AVIEW
+       e                                         CLD
+
+jump .lmn ->  GTO .lmn
+              PRGM off
+              Press byte jump key
+              PRGM on
+
+ejump .lmn -> PRGM off
+              RTN
+              RCL e
+              GTO .lmn
+              Press byte jump key
+              STO e
+              PRGM on
+
+Key assignment keycodes
+     09       19       29       39       49
+  +------+ +------+ +------+ +------+ +------+
+  |  01  | |  11  | |  21  | |  31  | |  41  |
+  +------+ +------+ +------+ +------+ +------+
+     0A       1A       2A       3A       4A
+  +------+ +------+ +------+ +------+ +------+
+  |  02  | |  12  | |  22  | |  32  | |  42  |
+  +------+ +------+ +------+ +------+ +------+
+              1B       2B       3B       4B
+  +------+ +------+ +------+ +------+ +------+
+  |      | |  13  | |  23  | |  33  | |  43  |
+  +------+ +------+ +------+ +------+ +------+
+          0C           2C       3C       4C
+  +---------------+ +------+ +------+ +------+
+  |       44      | |  24  | |  34  | |  44  |
+  +---------------+ +------+ +------+ +------+
+     0D          1D          2D          3D
+  +------+    +------+    +------+    +------+
+  |  05  |    |  15  |    |  25  |    |  35  |
+  +------+    +------+    +------+    +------+
+     0E          1E          2E          3E
+  +------+    +------+    +------+    +------+
+  |  06  |    |  16  |    |  26  |    |  36  |
+  +------+    +------+    +------+    +------+
+     0F          1F          2F          3F
+  +------+    +------+    +------+    +------+
+  |  07  |    |  17  |    |  27  |    |  37  |
+  +------+    +------+    +------+    +------+
+     10          20          30          40
+  +------+    +------+    +------+    +------+
+  |  08  |    |  18  |    |  28  |    |  38  |
+  +------+    +------+    +------+    +------+
+
+Key assignment flag bits
+  +------+ +------+ +------+ +------+ +------+
+  |  36  | |  28  | |  20  | |  12  | |   4  |
+  +------+ +------+ +------+ +------+ +------+
+
+  +------+ +------+ +------+ +------+ +------+
+  |  35  | |  27  | |  19  | |  11  | |   3  |
+  +------+ +------+ +------+ +------+ +------+
+
+  +------+ +------+ +------+ +------+ +------+
+  |      | |  26  | |  18  | |  10  | |   2  |
+  +------+ +------+ +------+ +------+ +------+
+
+  +---------------+ +------+ +------+ +------+
+  |       33      | |  17  | |   9  | |   1  |
+  +---------------+ +------+ +------+ +------+
+
+  +------+    +------+    +------+    +------+
+  |  32  |    |  24  |    |  16  |    |   8  |
+  +------+    +------+    +------+    +------+
+
+  +------+    +------+    +------+    +------+
+  |  31  |    |  23  |    |  15  |    |   7  |
+  +------+    +------+    +------+    +------+
+
+  +------+    +------+    +------+    +------+
+  |  30  |    |  22  |    |  14  |    |   6  |
+  +------+    +------+    +------+    +------+
+
+  +------+    +------+    +------+    +------+
+  |  29  |    |  21  |    |  13  |    |   5  |
+  +------+    +------+    +------+    +------+
+
+Byte Codes:
+Hex  Dec  Function  Postfix  Display
+ 00    0  NULL          0    Overline
+ 01    1  LBL 00        1    Full man
+ 02    2  LBL 01        2    Starburst
+ 03    3  LBL 02        3    Starburst
+ 04    4  LBL 03        4    Head, both legs
+ 05    5  LBL 04        5    Head, both legs, left arm
+ 06    6  LBL 05        6    Head, left leg
+ 07    7  LBL 06        7    Starburst
+ 08    8  LBL 07        8    Starburst
+ 09    9  LBL 08        9    Starburst
+ 0A   10  LBL 09       10    Starburst
+ 0B   11  LBL 10       11    Starburst
+ 0C   12  LBL 11       12    Micro symbol
+ 0D   13  LBL 12       13    Angle symbol
+ 0E   14  LBL 13       14    Starburst
+ 0F   15  LBL 14       15    Starburst
+
+ 10   16  0            16    Starburst
+ 11   17  1            17    Starburst
+ 12   18  2            18    Starburst
+ 13   19  3            19    Starburst
+ 14   20  4            20    Starburst
+ 15   21  5            21    Starburst
+ 16   22  6            22    Starburst
+ 17   23  7            23    Starburst
+ 18   24  8            24    Starburst
+ 19   25  9            25    Starburst
+ 1A   26  .            26    Starburst
+ 1B   27  EEX          27    Starburst
+ 1C   28  CHS          28    Starburst
+ 1D   29  GTO"         29    Unequal symbol
+ 1E   30  XEQ"         30    Starburst
+ 1F   31               31    Starburst
+
+ 20   32  RCL 00       32    <space>
+ 21   33  RCL 01       33    !
+ 22   34  RCL 02       34    "
+ 23   35  RCL 03       35    #
+ 24   36  RCL 04       36    $
+ 25   37  RCL 05       37    %
+ 26   38  RCL 06       38    &
+ 27   39  RCL 07       39    '
+ 28   40  RCL 08       40    (
+ 29   41  RCL 09       41    )
+ 2A   42  RCL 10       42    *
+ 2B   43  RCL 11       43    +
+ 2C   44  RCL 12       44    ,
+ 2D   45  RCL 13       45    -
+ 2E   46  RCL 14       46    .
+ 2F   47  RCL 15       47    /
+
+ 30   48  STO 00       48    0
+ 31   49  STO 01       49    1
+ 32   50  STO 02       50    2
+ 33   51  STO 03       51    3
+ 34   52  STO 04       52    4
+ 35   53  STO 05       53    5
+ 36   54  STO 06       54    6
+ 37   55  STO 07       55    7
+ 38   56  STO 08       56    8
+ 39   57  STO 09       57    9
+ 3A   58  STO 10       58    :
+ 3B   59  STO 11       59    ;
+ 3C   60  STO 12       60    <
+ 3D   61  STO 13       61    =
+ 3E   62  STO 14       62    >
+ 3F   63  STO 15       63    ?
+
+ 40   64  +            64    @
+ 41   65  -            65    A
+ 42   66  *            66    B
+ 43   67  /            67    C
+ 44   68  X<Y?         68    D
+ 45   69  X>Y?         69    E
+ 46   70  X<=Y?        70    F
+ 47   71  E+           71    G
+ 48   72  E-           72    H
+ 49   73  HMS+         73    I
+ 4A   74  HMS-         74    J
+ 4B   75  MOD          75    K
+ 4C   76  %            76    L
+ 4D   77  %CH          77    M
+ 4E   78  P-R          78    N
+ 4F   79  R-P          79    O
+
+ 50   80  LN           80    P
+ 51   81  X^2          81    Q
+ 52   82  SQRT         82    R
+ 53   83  Y^X          83    S
+ 54   84  CHS          84    T
+ 55   85  e^X          85    U
+ 56   86  LOG          86    V
+ 57   87  10^X         87    W
+ 58   88  e^X-1        88    X
+ 59   89  SIN          89    Y
+ 5A   90  COS          90    Z
+ 5B   91  TAN          91    [
+ 5C   92  ASIN         92    \
+ 5D   93  ACOS         93    ]
+ 5E   94  ATAN         94    ^
+ 5F   95  DEC          95    _
+
+ 60   96  1/X          96    Text symbol
+ 61   97  ABS          97    a
+ 62   98  FACT         98    b
+ 63   99  X<>0?        99    c
+ 64  100  X>0?        100    d
+ 65  101  LN1+X       101    e
+ 66  102  X<0?          A    Starburst
+ 67  103  X=0?          B    Starburst
+ 68  104  INT           C    Starburst
+ 69  105  FRC           D    Starburst
+ 6A  106  D-R           E    Starburst
+ 6B  107  R-D           F    Starburst
+ 6C  108  HMS           G    Starburst
+ 6D  109  HR            H    Starburst
+ 6E  110  RND           I    Starburst
+ 6F  111  OCT           J    Starburst
+
+ 70  112  CLE           T    Starburst
+ 71  113  X<>Y          Z    Starburst
+ 72  114  PI            Y    Starburst
+ 73  115  CLST          X    Starburst
+ 74  116  R^            L    Starburst
+ 75  117  RDN           M    Starburst
+ 76  118  LASTX         N    Starburst
+ 77  119  CLX           O    Starburst
+ 78  120  X=Y?          P    Starbust
+ 79  121  X<>Y?         Q    Starburst
+ 7A  122  SIGN          |-   Text symbol
+ 7B  123  X<=0?         a    Starburst
+ 7C  124  MEAN          b    Starburst
+ 7D  125  SDEV          c    Starburst
+ 7E  126  AVIEW         d    Summation symbol
+ 7F  127  CLD           e    Append symbol
+
+ 80  128  DEG         IND 00 All remaining are starbursts
+ 81  129  RAD         IND 01
+ 82  130  GRAD        IND 02
+ 83  131  ENTER^      IND 03
+ 84  132  STOP        IND 04
+ 85  133  RTN         IND 05
+ 86  134  BEEP        IND 06
+ 87  135  CLA         IND 07
+ 88  136  ASHF        IND 08
+ 89  137  PSE         IND 09
+ 8A  138  CLRG        IND 10
+ 8B  139  AOFF        IND 11
+ 8C  140  AON         IND 12
+ 8D  141  OFF         IND 13
+ 8E  142  PROMPT      IND 14
+ 8F  143  ADV         IND 15
+
+ 90  144  RCL __      IND 16
+ 91  145  STO __      IND 17
+ 92  146  ST+ __      IND 18
+ 93  147  ST- __      IND 19
+ 94  148  ST* __      IND 20
+ 95  149  ST/ __      IND 21
+ 96  150  ISG __      IND 22
+ 97  151  DSE __      IND 23
+ 98  152  VIEW __     IND 24
+ 99  153  EREG __     IND 25
+ 9A  154  ASTO __     IND 26
+ 9B  155  ARCL __     IND 27
+ 9C  156  FIX _       IND 28
+ 9D  157  SCI _       IND 29
+ 9E  158  ENG _       IND 30
+ 9F  159  TONE _      IND 31
+
+ A0  160  XROM        IND 32
+ A1  161  XROM        IND 33
+ A2  162  XROM        IND 34
+ A3  163  XROM        IND 35
+ A4  164  XROM        IND 36
+ A5  165  XROM        IND 37
+ A6  166  XROM        IND 38
+ A7  167  XROM        IND 39
+ A8  168  SF __       IND 40
+ A9  169  CF __       IND 41
+ AA  170  FS?C __     IND 42
+ AB  171  FC?C __     IND 43
+ AC  172  FS? __      IND 44
+ AD  173  FC? __      IND 45
+ AE  174  GTO/XEQ IND IND 46
+ AF  175              IND 47
+
+ B0  176              IND 48
+ B1  177  GTO 00      IND 49
+ B2  178  GTO 01      IND 50
+ B3  179  GTO 02      IND 51
+ B4  180  GTO 03      IND 52
+ B5  181  GTO 04      IND 53
+ B6  182  GTO 05      IND 54
+ B7  183  GTO 06      IND 55
+ B8  184  GTO 07      IND 56
+ B9  185  GTO 08      IND 57
+ BA  186  GTO 09      IND 58
+ BB  187  GTO 10      IND 59
+ BC  188  GTO 11      IND 60
+ BD  189  GTO 12      IND 61
+ BE  190  GTO 13      IND 62
+ BF  191  GTO 14      IND 63
+
+ C0  192  Global      IND 64
+ C1  193  Global      IND 65
+ C2  194  Global      IND 66
+ C3  195  Global      IND 67
+ C4  196  Global      IND 68
+ C5  197  Global      IND 69
+ C6  198  Global      IND 70
+ C7  199  Global      IND 71
+ C8  200  Global      IND 72
+ C9  201  Global      IND 73
+ CA  202  Global      IND 74
+ CB  203  Global      IND 75
+ CC  204  Global      IND 76
+ CD  205  Global      IND 77
+ CE  206  X<> __      IND 78
+ CF  207  LBL"        IND 79
+
+ D0  208  GTO __      IND 80
+ D1  209  GTO __      IND 81
+ D2  210  GTO __      IND 82
+ D3  211  GTO __      IND 83
+ D4  212  GTO __      IND 84
+ D5  213  GTO __      IND 85
+ D6  214  GTO __      IND 86
+ D7  215  GTO __      IND 87
+ D8  216  GTO __      IND 88
+ D9  217  GTO __      IND 89
+ DA  218  GTO __      IND 90
+ DB  219  GTO __      IND 91
+ DC  220  GTO __      IND 92
+ DD  221  GTO __      IND 93
+ DE  222  GTO __      IND 94
+ DF  223  GTO __      IND 95
+
+ E0  224  XEQ __      IND 96
+ E1  225  XEQ __      IND 97
+ E2  226  XEQ __      IND 98
+ E3  227  XEQ __      IND 99
+ E4  228  XEQ __      IND 100
+ E5  229  XEQ __      IND 101
+ E6  230  XEQ __      IND A
+ E7  231  XEQ __      IND B
+ E8  232  XEQ __      IND C
+ E9  233  XEQ __      IND D
+ EA  234  XEQ __      IND E
+ EB  235  XEQ __      IND F
+ EC  236  XEQ __      IND G
+ ED  237  XEQ __      IND H
+ EE  238  XEQ __      IND I
+ EF  239  XEQ __      IND J
+
+ F0  240  Text 0      IND T
+ F1  241  Text 1      IND Z
+ F2  242  Text 2      IND Y
+ F3  243  Text 3      IND X
+ F4  244  Text 4      IND L
+ F5  245  Text 5      IND M
+ F6  246  Text 6      IND N
+ F7  247  Text 7      IND O
+ F8  248  Text 8      IND P
+ F9  249  Text 9      IND Q
+ FA  250  Text 10     IND |-
+ FB  251  Text 11     IND a
+ FC  252  Text 12     IND b
+ FD  253  Text 13     IND c
+ FE  254  Text 14     IND d
+ FF  255  Text 15     IND e
+
+Tape Drive - 28
+ A7 01    CREATE  - XROM 28,01
+ A7 02    DIR     - XROM 28,02
+ A7 03    NEWM    - XROM 28,03
+ A7 04    PURGE   - XROM 28,04
+ A7 05    READA   - XROM 28,05
+ A7 06    READK   - XROM 28,06
+ A7 07    READP   - XROM 28,07
+ A7 08    READR   - XROM 28,08
+ A7 09    READRX  - XROM 28,09
+ A7 0A    READS   - XROM 28,10
+ A7 0B    READSUB - XROM 28,11
+ A7 0C    RENAME  - XROM 28,12
+ A7 0D    SEC     - XROM 28,13
+ A7 0E    SEEKR   - XROM 28,14
+ A7 0F    UNSEC   - XROM 28,15
+ A7 10    VERIFY  - XROM 28,16
+ A7 11    WRTA    - XROM 28,17
+ A7 12    WRTK    - XROM 28,18
+ A7 13    WRTP    - XROM 28,19
+ A7 14    WRTPV   - XROM 28,20
+ A7 15    WRTR    - XROM 28,21
+ A7 16    WRTRX   - XROM 28,22
+ A7 17    WRTS    - XROM 28,23
+ A7 18    ZERO    - XROM 28,24
+Tape contains 512 sectors of 256 bytes each
+
+Printer   - 29
+ A7 41    ACA     - XROM 29,01
+ A7 42    ACCHR   - XROM 29,02
+ A7 43    ACCOL   - XROM 29,03
+ A7 44    ACSPEC  - XROM 29,04
+ A7 45    ACX     - XROM 29,05
+ A7 46    BLDSPEC - XROM 29,06
+ A7 47    LIST    - XROM 29,07
+ A7 48    PRA     - XROM 29,08
+ A7 49    PRAXIS  - XROM 29,09
+ A7 4A    PRBUF   - XROM 29,10
+ A7 4B    PRFLAGS - XROM 29,11
+ A7 4C    PRKEYS  - XROM 29,12
+ A7 4D    PRP     - XROM 29,13
+ A7 4E    PRPLOT  - XROM 29,14
+ A7 4F    PRPLOTP - XROM 29,15
+ A7 50    PRREG   - XROM 29,16
+ A7 51    PRREGX  - XROM 29,17
+ A7 52    PRE     - XROM 29,18
+ A7 53    PRSTK   - XROM 29,19
+ A7 54    PRX     - XROM 29,20
+ A7 55    REGPLOT - XROM 29,21
+ A7 56    SKPCHR  - XROM 29,22
+ A7 57    SKPCOL  - XROM 29,23
+ A7 58    STKPLOT - XROM 29,24
+
+Card Reader - 30
+ A7 81    MRG     - XROM 30,01
+ A7 82    RDTA    - XROM 30,02
+ A7 83    RDTAX   - XROM 30,03
+ A7 84    RSUB    - XROM 30,04
+ A7 85    VER     - XROM 30,05
+ A7 86    WALL    - XROM 30,06
+ A7 87    WDTA    - XROM 30,07
+ A7 88    WDTAX   - XROM 30,08
+ A7 89    WPRV    - XROM 30,09
+ A7 8A    WSTS    - XROM 30,10
+ A7 8B    7CLREG  - XROM 30,11
+ A7 8C    7DSP0   - XROM 30,12
+ A7 8D    7DSP1   - XROM 30,13
+ A7 8E    7DSP2   - XROM 30,14
+ A7 8F    7DSP3   - XROM 30,15
+ A7 90    7DSP4   - XROM 30,16
+ A7 91    7DSP5   - XROM 30,17
+ A7 92    7DSP6   - XROM 30,18
+ A7 93    7DSP7   - XROM 30,19
+ A7 94    7DSP8   - XROM 30,20
+ A7 95    7DSP9   - XROM 30,21
+ A7 96    7DSPI   - XROM 30,22
+ A7 97    7DSZ    - XROM 30,23
+ A7 98    7DSZI   - XROM 30,24
+ A7 99    7ENG    - XROM 30,25
+ A7 9A    7FIX    - XROM 30,26
+ A7 9B    7GSBI   - XROM 30,27
+ A7 9C    7GTOI   - XROM 30,28
+ A7 9D    7ISZ    - XROM 30,29
+ A7 9E    7ISZI   - XROM 30,30
+ A7 9F    7P<>S   - XROM 30,31
+ A7 A0    7PRREG  - XROM 30,32
+ A7 A1    7PRSTK  - XROM 30,33
+ A7 A2    7PRTX   - XROM 30,34
+ A7 A3    7RCLE   - XROM 30,35
+ A7 A4    7SCI    - XROM 30,36
+
+Extended Functions 82180A
+ A6 41    ALENG   - XROM 25,01
+ A6 42    ANUM    - XROM 25,02
+ A6 43    APPCHR  - XROM 25,03
+ A6 44    APPREC  - XROM 25,04
+ A6 45    ARCLREC - XROM 25,05
+ A6 46    AROT    - XROM 25,06
+ A6 47    ATOX    - XROM 25,07
+ A6 48    CLFL    - XROM 25,08
+ A6 49    CLKEYS  - XROM 25,09
+ A6 4A    CRFLAS  - XROM 25,10
+ A6 4B    CRFLD   - XROM 25,11
+ A6 4C    DELCHR  - XROM 25,12
+ A6 4D    DELREC  - XROM 25,13
+ A6 4E    EMDIR   - XROM 25,14
+ A6 4F    FLSIZE  - XROM 25,15
+ A6 50    GETAS   - XROM 25,16
+ A6 51    GETKEY  - XROM 25,17
+ A6 52    GETP    - XROM 25,18
+ A6 53    GETR    - XROM 25,19
+ A6 54    GETREC  - XROM 25,20
+ A6 55    GETRX   - XROM 25,21
+ A6 56    GETSUB  - XROM 25,22
+ A6 57    GETX    - XROM 25,23
+ A6 58    INSCHR  - XROM 25,24
+ A6 59    INSREC  - XROM 25,25
+ A6 5A    PASN    - XROM 25,26
+ A6 5B    PCLPS   - XROM 25,27
+ A6 5C    POSA    - XROM 25,28
+ A6 5D    POSFL   - XROM 25,29
+ A6 5E    PSIZE   - XROM 25,30
+ A6 5F    PURFL   - XROM 25,31
+ A6 60    RCLFLAG - XROM 25,32
+ A6 61    RCLPT   - XROM 25,33
+ A6 62    RCLPTA  - XROM 25,34
+ A6 63    REGMOVE - XROM 25,35
+ A6 64    REGSWAP - XROM 25,36
+ A6 65    SAVEAS  - XROM 25,37
+ A6 66    SAVEP   - XROM 25,38
+ A6 67    SAVER   - XROM 25,39
+ A6 68    SAVERX  - XROM 25,40
+ A6 69    SAVEX   - XROM 25,41
+ A6 6A    SEEKPT  - XROM 25,42
+ A6 6B    SEEKPTA - XROM 25,43
+ A6 6C    SIZE?   - XROM 25,44
+ A6 6D    STOFLAG - XROM 25,45
+ A6 6E    X<>F    - XROM 25,46
+ A6 6F    XTOA    - XROM 25,47
+
+Time/Date Module 82182A
+ A6 81    ADATE   - XROM 26,01
+ A6 82    ALMCAT  - XROM 26,02
+ A6 83    ALMNOW  - XROM 26,03
+ A6 84    ATIME   - XROM 26,04
+ A6 85    ATIME24 - XROM 26,05
+ A6 86    CLK12   - XROM 26,06
+ A6 87    CLK24   - XROM 26,07
+ A6 88    CLKT    - XROM 26,08
+ A6 89    CLKTD   - XROM 26,09
+ A6 8A    CLOCK   - XROM 26,10
+ A6 8B    CORRECT - XROM 26,11
+ A6 8C    DATE    - XROM 26,12
+ A6 8D    DATE+   - XROM 26,13
+ A6 8E    DDAYS   - XROM 26,14
+ A6 8F    DMY     - XROM 26,15
+ A6 90    DOW     - XROM 26,16
+ A6 91    MDY     - XROM 26,17
+ A6 92    RCLAF   - XROM 26,18
+ A6 93    RCLSW   - XROM 26,19
+ A6 94    RUNSW   - XROM 26,20
+ A6 95    SETAF   - XROM 26,21
+ A6 96    SETDATE - XROM 26,22
+ A6 97    SETIME  - XROM 26,23
+ A6 98    SETSW   - XROM 26,24
+ A6 99    STOPSW  - XROM 26,25
+ A6 9A    SW      - XROM 26,26
+ A6 9B    T+X     - XROM 26,27
+ A6 9C    TIME    - XROM 26,28
+ A6 9D    XYZALM  - XROM 26,29
+
+
+Printer characters:
+0  ..... 1  ..... 2  ***** 3  ..... 4  ..... 5  .***. 6  ***** 7  ..*..  1
+   ..*..    .....    .....    ..*..    .....    *...*    *...*    ..*..  2
+   .***.    .*.*.    *...*    .*...    .**.*    ****.    *....    ..*..  4
+   *****    ..*..    .*.*.    *****    *..*.    *...*    *....    ..*..  8
+   .***.    .*.*.    ..*..    .*...    *..*.    **..*    *....    *.*.*  16
+   ..*..    .....    .*.*.    ..*..    *..*.    *.**.    *....    .***.  32
+   .....    .....    *...*    .....    .**.*    *....    .....    ..*..  64
+
+8  ..... 9  ..... 10 ..... 11 ..... 12 ..... 13 ..... 14 ..... 15 .***.  1
+   ..*..    .....    ..*..    *....    .....    ....*    .....    ..*..  2
+   ..*..    .****    .***.    .*...    .*..*    ...*.    ....*    .***.  4
+   .***.    *..*.    *****    ..*..    .*..*    ..*..    ..**.    *...*  8
+   .*.*.    *..*.    .***.    .*.*.    .*..*    .**..    .**..    .***.  16
+   *...*    *..*.    ..*..    *...*    .***.    *..*.    ..*..    ..*..  32
+   *****    .**..    .....    *...*    *....    *****    ..*..    .***.  64
+
+16 .***. 17 .***. 18 ..**. 19 ..*.. 20 ..*.. 21 .*.*. 22 .*.*. 23 .*.*.  1
+   *...*    *...*    .*...    .....    .....    .....    .....    .***.  2
+   *...*    *...*    ..*..    .***.    .***.    .***.    .***.    *...*  4
+   *****    *...*    .***.    *...*    *..*.    *...*    *..*.    *...*  8
+   *...*    *...*    *...*    *****    *..*.    *****    *..*.    *...*  16
+   *...*    .*.*.    *...*    *...*    *..*.    *...*    *..*.    *...*  32
+   .***.    **.**    .***.    *...*    .**.*    *...*    .**.*    .***.  64
+
+24 .*.*. 25 .*.*. 26 .*.*. 27 ..*** 28 ..... 29 ..... 30 ..**. 31 *.*.*
+   .....    *...*    .....    ***..    .....    ...*.    .*..*    .*.*.
+   .***.    *...*    *...*    *.*..    .*.*.    *****    .*...    *.*.*
+   *...*    *...*    *...*    *****    *.***    ..*..    ***..    .*.*.
+   *...*    *...*    *...*    ***..    *.***    *****    .*...    *.*.*
+   *...*    *...*    *...*    *.*..    *.*..    .*...    .*..*    .*.*.
+   .***.    .***.    .***.    *.***    .*.**    .....    ****.    *.*.*
+
+32 ..... 33 ..*.. 34 .*.*. 35 .*.*. 36 ..*.. 37 **... 38 .*... 39 ..*..
+   .....    ..*..    .*.*.    .*.*.    .****    **..*    *.*..    ..*..
+   .....    ..*..    .....    *****    *.*..    ...*.    *.*..    .....
+   .....    ..*..    .....    .*.*.    .***.    ..*..    .*...    .....
+   .....    ..*..    .....    *****    ..*.*    .*...    *.*.*    .....
+   .....    .....    .....    .*.*.    ****.    *..**    *..*.    .....
+   .....    ..*..    .....    .*.*.    ..*..    ...**    .**.*    .....
+
+40 ...*. 41 .*... 42 ..... 43 ..... 44 ..... 45 ..... 46 ..... 47 .....
+   ..*..    ..*..    ..*..    ..*..    .....    .....    .....    ....*
+   .*...    ...*.    *****    ..*..    .....    .....    .....    ...*.
+   .*...    ...*.    .***.    *****    .....    *****    .....    ..*..
+   .*...    ...*.    *****    ..*..    ..*..    .....    .....    .*...
+   ..*..    ..*..    ..*..    ..*..    ..*..    .....    .**..    *....
+   ...*.    .*...    .....    .....    .*...    .....    .**..    .....
+
+48 .***. 49 ..*.. 50 .***. 51 ***** 52 ...*. 53 ***** 54 ..**. 55 *****
+   *...*    .**..    *...*    ....*    ..**.    *....    .*...    ....*
+   *..**    ..*..    ....*    ...*.    .*.*.    ****.    *....    ...*.
+   *.*.*    ..*..    ..**.    ..**.    *..*.    ....*    ****.    ..*..
+   **..*    ..*..    .*...    ....*    *****    ....*    *...*    .*...
+   *...*    ..*..    *....    *...*    ...*.    *...*    *...*    .*...
+   .***.    .***.    *****    .***.    ...*.    .***.    .***.    .*...
+
+56 .***. 57 .***. 58 ..... 59 ..... 60 ...*. 61 ..... 62 .*... 63 .***.
+   *...*    *...*    .....    .....    ..*..    .....    ..*..    *...*
+   *...*    *...*    ..*..    ..*..    .*...    *****    ...*.    ....*
+   .***.    .****    .....    .....    *....    .....    ....*    ...*.
+   *...*    ....*    .....    ..*..    .*...    *****    ...*.    ..*..
+   *...*    ...*.    ..*..    ..*..    ..*..    .....    ..*..    .....
+   .***.    .**..    .....    .*...    ...*.    .....    .*...    ..*..
+
+64 .***. 65 .***. 66 ****. 67 .***. 68 ****. 69 ***** 70 ***** 71 .***.
+   *...*    *...*    *...*    *...*    .*..*    *....    *....    *...*
+   *.***    *...*    *...*    *....    .*..*    *....    *....    *....
+   *.*.*    *...*    ****.    *....    .*..*    ****.    ****.    *....
+   *.***    *****    *...*    *....    .*..*    *....    *....    *..**
+   *....    *...*    *...*    *...*    .*..*    *....    *....    *...*
+   .***.    *...*    ****.    .***.    ****.    *****    *....    .****
+
+72 *...* 73 .***. 74 ....* 75 *...* 76 *.... 77 *...* 78 *...* 79 .***.
+   *...*    ..*..    ....*    *..*.    *....    **.**    *...*    *...*
+   *...*    ..*..    ....*    *.*..    *....    *.*.*    **..*    *...*
+   *****    ..*..    ....*    **...    *....    *.*.*    *.*.*    *...*
+   *...*    ..*..    ....*    *.*..    *....    *...*    *..**    *...*
+   *...*    ..*..    *...*    *..*.    *....    *...*    *...*    *...*
+   *...*    .***.    .***.    *...*    *****    *...*    *...*    .***.
+
+80 ****. 81 .***. 82 ****. 83 .***. 84 ***** 85 *...* 86 *...* 87 *...*
+   *...*    *...*    *...*    *...*    ..*..    *...*    *...*    *...*
+   *...*    *...*    *...*    *....    ..*..    *...*    *...*    *...*
+   ****.    *...*    ****.    .***.    ..*..    *...*    .*.*.    *.*.*
+   *....    *.*.*    ***..    ....*    ..*..    *...*    .*.*.    *.*.*
+   *....    *..*.    *..*.    *...*    ..*..    *...*    ..*..    **.**
+   *....    .**.*    *...*    .***.    ..*..    .***.    ..*..    *...*
+
+88 *...* 89 *...* 90 ***** 91 .***. 92 ..... 93 .***. 94 ..*.. 95 .....
+   *...*    *...*    ....*    .*...    *....    ...*.    .***.    .....
+   .*.*.    .*.*.    ...*.    .*...    .*...    ...*.    *.*.*    .....
+   ..*..    ..*..    ..*..    .*...    ..*..    ...*.    ..*..    .....
+   .*.*.    ..*..    .*...    .*...    ...*.    ...*.    ..*..    .....
+   *...*    ..*..    *....    .*...    ....*    ...*.    ..*..    .....
+   *...*    ..*..    *****    .***.    .....    .***.    ..*..    *****
+
+96 .***. 97 ..... 98 *.... 99 ..... 100....* 101..... 102..*..103.....
+   ..*..    .....    *....    .....    ....*    .....    .*.*.   .....
+   ..*..    .***.    *.**.    .***.    .**.*    .***.    .*...   .****
+   .....    ....*    **..*    *....    *..**    *...*    ***..   *...*
+   .....    .****    *...*    *....    *...*    ****.    .*...   .****
+   .....    *...*    *...*    *...*    *...*    *....    .*...   ....*
+   .....    .****    ****.    .***.    .****    .***.    .*...   ..**.
+
+104*.... 105..*.. 106...*. 107*.... 108.**.. 108..... 110..... 111.....
+   *....    .....    .....    *....    ..*..    .....    .....    .....
+   *.**.    .**..    ...*.    *..*.    ..*..    .*.*.    *.**.    .***.
+   **..*    ..*..    ...*.    ***..    ..*..    *.*.*    **..*    *...*
+   *...*    ..*..    ...*.    **...    ..*..    *.*.*    *...*    *...*
+   *...*    ..*..    *..*.    *.*..    ..*..    *...*    *...*    *...*
+   *...*    .***.    .**..    *..*.    .***.    *...*    *...*    .***.
+
+112..... 113..... 114..... 115..... 116..... 117..... 118..... 119.....
+   .....    .....    .....    .....    .*...    .....    .....    .....
+   ****.    .***.    *.**.    .***.    ***..    *...*    *...*    *...*
+   *...*    *..*.    **..*    *....    .*...    *...*    *...*    *...*
+   **..*    *.**.    *....    .***.    .*...    *...*    *...*    *.*.*
+   *.**.    .***.    *....    ....*    .*.*.    *..**    .*.*.    *.*.*
+   *....    ...**    *....    ****.    ..*..    .**.*    ..*..    .*.*.
+
+120..... 121..... 122..... 123..... 124..... 125..... 126***** 127*....
+   .....    .....    .....    .....    .....    ..*..    *...*    *....
+   *...*    *...*    *****    ....*    ...*.    ...*.    .*...    *....
+   .*.*.    .*.*.    ...*.    ****.    ..*..    *****    ..*..    *****
+   ..*..    ..*..    ..*..    .*.*.    .**..    ...*.    .*...    *....
+   .*.*.    ..*..    .*...    .*.*.    *..*.    ..*..    *...*    *....
+   *...*    .*...    *****    .*.*.    *****    .....    *****    *....
+
