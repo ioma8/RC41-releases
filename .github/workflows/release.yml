@@ -35,7 +35,12 @@ jobs:
             -r win-x64 `
             --self-contained true `
             -p:PublishSingleFile=true `
-            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:PublishTrimmed=true `
+            -p:EnableCompressionInSingleFile=true `
+            -p:DebuggerSupport=false `
+            -p:EnableUnsafeBinaryFormatterSerialization=false `
+            -p:EnableUnsafeUTF7Encoding=false `
+            -p:InvariantGlobalization=false `
             -p:Version=${{ inputs.version }} `
             -o dist/win-x64
       
