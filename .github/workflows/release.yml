@@ -52,7 +52,7 @@ jobs:
           retention-days: 1
 
   build-macos-wrappers:
-    name: Build macOS Wineskin Wrappers
+    name: Build macOS Wine Wrappers
     needs: build-windows
     runs-on: macos-latest
     strategy:
@@ -69,33 +69,11 @@ jobs:
           name: Rc41-win-x64
           path: ./
       
-      - name: Install Homebrew dependencies
-        run: |
-          brew install wget create-dmg
+      - name: Install create-dmg
+        run: brew install create-dmg
       
-      - name: Download and setup Wineskin
+      - name: Create Wine wrapper
         run: |
-          mkdir -p wineskin-build
-          cd wineskin-build
-          
-          # Download Wineskin Winery
-          wget https://github.com/Gcenx/WineskinServer/releases/latest/download/Wineskin.Winery.app.zip
-          unzip Wineskin.Winery.app.zip
-          
-          # Download Wine engine based on architecture
-          if [ "${{ matrix.arch }}" = "arm64" ]; then
-            ENGINE="WS11WineCX64Bit23.7.1-1"
-          else
-            ENGINE="WS11WineCX64Bit22.1.1"
-          fi
-          
-          echo "Using Wine engine: $ENGINE"
-      
-      - name: Create Wineskin wrapper
-        run: |
-          cd wineskin-build
-          
-          # Create app bundle structure
           mkdir -p "RC41.app/Contents/MacOS"
           mkdir -p "RC41.app/Contents/Resources"
           
@@ -106,9 +84,9 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>CFBundleDevelopmentRegion</key>
-              <string>English</string>
+              <string>en</string>
               <key>CFBundleExecutable</key>
-              <string>Rc41</string>
+              <string>RC41</string>
               <key>CFBundleIdentifier</key>
               <string>com.rc41.calculator</string>
               <key>CFBundleInfoDictionaryVersion</key>
@@ -130,59 +108,62 @@ jobs:
           EOF
           
           # Create launcher script
-          cat > "RC41.app/Contents/MacOS/Rc41" << 'EOFSCRIPT'
+          cat > "RC41.app/Contents/MacOS/RC41" << 'LAUNCHER'
           #!/bin/bash
-          WINEPREFIX="$HOME/.wine-rc41" wine "../Resources/Rc41.exe"
-          EOFSCRIPT
+          DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+          WINEPREFIX="$HOME/.wine-rc41" WINEDEBUG=-all wine "$DIR/../Resources/Rc41.exe" 2>/dev/null &
+          LAUNCHER
           
-          chmod +x "RC41.app/Contents/MacOS/Rc41"
+          chmod +x "RC41.app/Contents/MacOS/RC41"
           
           # Copy Windows exe
-          cp ../Rc41.exe "RC41.app/Contents/Resources/"
+          cp Rc41.exe "RC41.app/Contents/Resources/"
           
           # Create README
-          cat > "RC41.app/Contents/Resources/README.txt" << 'EOFREADME'
+          cat > "RC41.app/Contents/Resources/README.txt" << README
           RC41 HP Calculator Emulator - macOS Wine Wrapper
           
-          This is a Wine wrapper for running RC41 on macOS.
+          This wrapper allows you to run RC41 on macOS using Wine.
           
           Requirements:
-          - Wine must be installed (brew install wine-stable or wine-crossover)
-          - First run may take longer as Wine initializes
+          - Wine must be installed: brew install wine-stable
+          - First run may take a moment as Wine initializes
           
           Architecture: ${{ matrix.arch }}
           Version: ${{ inputs.version }}
-          EOFREADME
+          
+          To run: Double-click RC41.app
+          
+          Troubleshooting:
+          - If it doesn't start, try: open RC41.app
+          - Check Wine: which wine
+          - Reset Wine prefix: rm -rf ~/.wine-rc41
+          README
       
       - name: Create DMG
         run: |
-          cd wineskin-build
           create-dmg \
             --volname "RC41 v${{ inputs.version }}" \
             --window-pos 200 120 \
             --window-size 600 400 \
             --icon-size 100 \
-            --icon "RC41.app" 175 120 \
+            --icon "RC41.app" 175 190 \
             --hide-extension "RC41.app" \
-            --app-drop-link 425 120 \
-            "../RC41-${{ matrix.arch }}-v${{ inputs.version }}.dmg" \
-            "RC41.app" || cp -r RC41.app "../RC41-${{ matrix.arch }}-v${{ inputs.version }}.app"
+            --app-drop-link 425 190 \
+            "RC41-${{ matrix.arch }}-v${{ inputs.version }}.dmg" \
+            "RC41.app" 2>&1 || echo "DMG creation had warnings (non-fatal)"
       
-      - name: Create ZIP fallback
+      - name: Create ZIP
         run: |
-          cd wineskin-build
-          if [ -d "RC41.app" ]; then
-            zip -r "../RC41-${{ matrix.arch }}-v${{ inputs.version }}.zip" "RC41.app"
-          fi
+          zip -r "RC41-${{ matrix.arch }}-v${{ inputs.version }}.zip" "RC41.app"
       
-      - name: Upload macOS artifact
+      - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Rc41-macos-${{ matrix.arch }}
           path: |
             RC41-${{ matrix.arch }}-v${{ inputs.version }}.dmg
             RC41-${{ matrix.arch }}-v${{ inputs.version }}.zip
-            RC41-${{ matrix.arch }}-v${{ inputs.version }}.app
           retention-days: 90
 
   create-release:
