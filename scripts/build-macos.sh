@@ -22,6 +22,6 @@ dotnet build "$ROOT_DIR/Rc41.sln" -c Release
 echo "Publishing Windows x64 self-contained..."
 mkdir -p "$ROOT_DIR/Dist/win-x64"
 dotnet publish "$ROOT_DIR/Rc41/Rc41.csproj" -c Release -r win-x64 --self-contained true \
-  -p:PublishSingleFile=true -p:PublishTrimmed=true -p:EnableCompressionInSingleFile=true -o "$ROOT_DIR/Dist/win-x64"
+  -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -o "$ROOT_DIR/Dist/win-x64"
 
 echo "Done. Output: $ROOT_DIR/Dist/win-x64/Rc41.exe"
