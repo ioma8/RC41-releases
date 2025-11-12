@@ -1,0 +1,29 @@
+# Build artifacts
+bin/
+obj/
+Dist/
+
+# .NET
+*.dll
+*.exe
+*.pdb
+*.cache
+*.props
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
