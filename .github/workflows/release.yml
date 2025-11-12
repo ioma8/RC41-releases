@@ -88,6 +88,30 @@ jobs:
           cp -R "Wine Stable.app/Contents/Resources/wine" "RC41.app/Contents/Frameworks/Wine"
           rm -rf "Wine Stable.app" wine-stable.tar.xz
           
+          # Optimize Wine bundle size
+          echo "Optimizing Wine bundle..."
+          WINE_DIR="RC41.app/Contents/Frameworks/Wine"
+          
+          # Remove Gecko (HTML engine - not needed) - saves ~200MB
+          if [ -d "$WINE_DIR/share/wine/gecko" ]; then
+            echo "Removing Gecko..."
+            rm -rf "$WINE_DIR/share/wine/gecko"
+          fi
+          
+          # Strip debug symbols to reduce size
+          echo "Stripping debug symbols..."
+          find "$WINE_DIR/lib" \( -name "*.so" -o -name "*.dylib" \) 2>/dev/null | while read f; do
+            strip -x "$f" 2>/dev/null || true
+          done
+          
+          # Remove man pages
+          if [ -d "$WINE_DIR/share/man" ]; then
+            rm -rf "$WINE_DIR/share/man"
+          fi
+          
+          echo "Wine optimization complete"
+          du -sh RC41.app
+          
           # Create Info.plist
           cat > "RC41.app/Contents/Info.plist" << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
@@ -153,7 +177,7 @@ jobs:
           - Check logs in Console.app
           README
           
-          echo "Bundle size:"
+          echo "Final bundle size:"
           du -sh RC41.app
       
       - name: Create DMG
@@ -215,7 +239,7 @@ jobs:
             - `Rc41.exe` - Windows x64 executable (~90MB)
             
             **macOS (Intel & Apple Silicon):**
-            - `RC41-macOS-v${{ inputs.version }}.dmg` - Self-contained macOS app with Wine included (~800MB)
+            - `RC41-macOS-v${{ inputs.version }}.dmg` - Self-contained macOS app with Wine included (~650MB)
             - `RC41-macOS-v${{ inputs.version }}.zip` - Alternative ZIP format
             
             > **Note:** The macOS version includes Wine, so no additional installation is needed! Just download, open, and run.
