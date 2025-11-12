@@ -51,13 +51,10 @@ jobs:
           path: dist/win-x64/Rc41.exe
           retention-days: 1
 
-  build-macos-wrappers:
-    name: Build macOS Wine Wrappers
+  build-macos-wrapper:
+    name: Build macOS Wine Wrapper (Universal)
     needs: build-windows
     runs-on: macos-latest
-    strategy:
-      matrix:
-        arch: [x86_64, arm64]
     
     steps:
       - name: Checkout code
@@ -72,10 +69,24 @@ jobs:
       - name: Install create-dmg
         run: brew install create-dmg
       
-      - name: Create Wine wrapper
+      - name: Create self-contained Wine wrapper
         run: |
+          # Create app bundle structure
           mkdir -p "RC41.app/Contents/MacOS"
           mkdir -p "RC41.app/Contents/Resources"
+          mkdir -p "RC41.app/Contents/Frameworks"
+          
+          # Download Wine Stable for macOS (universal binary)
+          WINE_VERSION="10.0_3"
+          WINE_URL="https://github.com/Gcenx/macOS_Wine_builds/releases/download/${WINE_VERSION}/wine-stable-${WINE_VERSION}-osx64.tar.xz"
+          
+          echo "Downloading Wine ${WINE_VERSION}..."
+          curl -L -o "wine-stable.tar.xz" "$WINE_URL"
+          
+          echo "Extracting Wine..."
+          tar xf "wine-stable.tar.xz"
+          cp -R "Wine Stable.app/Contents/Resources/wine" "RC41.app/Contents/Frameworks/Wine"
+          rm -rf "Wine Stable.app" wine-stable.tar.xz
           
           # Create Info.plist
           cat > "RC41.app/Contents/Info.plist" << 'EOF'
@@ -107,11 +118,15 @@ jobs:
           </plist>
           EOF
           
-          # Create launcher script
+          # Create launcher script with bundled Wine
           cat > "RC41.app/Contents/MacOS/RC41" << 'LAUNCHER'
           #!/bin/bash
           DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-          WINEPREFIX="$HOME/.wine-rc41" WINEDEBUG=-all wine "$DIR/../Resources/Rc41.exe" 2>/dev/null &
+          WINE_DIR="$DIR/../Frameworks/Wine/bin"
+          export WINEPREFIX="$HOME/.wine-rc41"
+          export WINEDEBUG=-all
+          export PATH="$WINE_DIR:$PATH"
+          "$WINE_DIR/wine" "$DIR/../Resources/Rc41.exe" 2>/dev/null &
           LAUNCHER
           
           chmod +x "RC41.app/Contents/MacOS/RC41"
@@ -121,24 +136,25 @@ jobs:
           
           # Create README
           cat > "RC41.app/Contents/Resources/README.txt" << README
-          RC41 HP Calculator Emulator - macOS Wine Wrapper
+          RC41 HP Calculator Emulator - Self-Contained macOS Bundle
           
-          This wrapper allows you to run RC41 on macOS using Wine.
+          This app includes Wine, so no additional installation is needed!
+          Supports both Intel and Apple Silicon Macs.
           
-          Requirements:
-          - Wine must be installed: brew install wine-stable
-          - First run may take a moment as Wine initializes
-          
-          Architecture: ${{ matrix.arch }}
           Version: ${{ inputs.version }}
           
           To run: Double-click RC41.app
           
+          Note: First run may take a moment as Wine initializes.
+          
           Troubleshooting:
           - If it doesn't start, try: open RC41.app
-          - Check Wine: which wine
           - Reset Wine prefix: rm -rf ~/.wine-rc41
+          - Check logs in Console.app
           README
+          
+          echo "Bundle size:"
+          du -sh RC41.app
       
       - name: Create DMG
         run: |
@@ -150,25 +166,25 @@ jobs:
             --icon "RC41.app" 175 190 \
             --hide-extension "RC41.app" \
             --app-drop-link 425 190 \
-            "RC41-${{ matrix.arch }}-v${{ inputs.version }}.dmg" \
+            "RC41-macOS-v${{ inputs.version }}.dmg" \
             "RC41.app" 2>&1 || echo "DMG creation had warnings (non-fatal)"
       
       - name: Create ZIP
         run: |
-          zip -r "RC41-${{ matrix.arch }}-v${{ inputs.version }}.zip" "RC41.app"
+          zip -r "RC41-macOS-v${{ inputs.version }}.zip" "RC41.app"
       
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Rc41-macos-${{ matrix.arch }}
+          name: Rc41-macos-universal
           path: |
-            RC41-${{ matrix.arch }}-v${{ inputs.version }}.dmg
-            RC41-${{ matrix.arch }}-v${{ inputs.version }}.zip
+            RC41-macOS-v${{ inputs.version }}.dmg
+            RC41-macOS-v${{ inputs.version }}.zip
           retention-days: 90
 
   create-release:
     name: Create Release
-    needs: [build-windows, build-macos-wrappers]
+    needs: [build-windows, build-macos-wrapper]
     runs-on: ubuntu-latest
     
     steps:
@@ -196,12 +212,12 @@ jobs:
             ### Downloads
             
             **Windows:**
-            - `Rc41.exe` - Windows x64 executable
+            - `Rc41.exe` - Windows x64 executable (~90MB)
             
-            **macOS:**
-            - `RC41-x86_64-v${{ inputs.version }}.dmg` - macOS Intel (x86_64)
-            - `RC41-arm64-v${{ inputs.version }}.dmg` - macOS Apple Silicon (ARM64)
+            **macOS (Intel & Apple Silicon):**
+            - `RC41-macOS-v${{ inputs.version }}.dmg` - Self-contained macOS app with Wine included (~800MB)
+            - `RC41-macOS-v${{ inputs.version }}.zip` - Alternative ZIP format
             
-            > **Note for macOS users:** These are Wine wrappers. You need to have Wine installed (`brew install wine-stable`).
+            > **Note:** The macOS version includes Wine, so no additional installation is needed! Just download, open, and run.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
