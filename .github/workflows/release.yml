@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  build:
+  build-windows:
     name: Build Windows x64
     runs-on: windows-latest
     
@@ -44,12 +44,163 @@ jobs:
             -p:Version=${{ inputs.version }} `
             -o dist/win-x64
       
-      - name: Upload artifacts
+      - name: Upload Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: Rc41-win-x64-v${{ inputs.version }}
+          name: Rc41-win-x64
           path: dist/win-x64/Rc41.exe
+          retention-days: 1
+
+  build-macos-wrappers:
+    name: Build macOS Wineskin Wrappers
+    needs: build-windows
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download Windows executable
+        uses: actions/download-artifact@v4
+        with:
+          name: Rc41-win-x64
+          path: ./
+      
+      - name: Install Homebrew dependencies
+        run: |
+          brew install wget create-dmg
+      
+      - name: Download and setup Wineskin
+        run: |
+          mkdir -p wineskin-build
+          cd wineskin-build
+          
+          # Download Wineskin Winery
+          wget https://github.com/Gcenx/WineskinServer/releases/latest/download/Wineskin.Winery.app.zip
+          unzip Wineskin.Winery.app.zip
+          
+          # Download Wine engine based on architecture
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            ENGINE="WS11WineCX64Bit23.7.1-1"
+          else
+            ENGINE="WS11WineCX64Bit22.1.1"
+          fi
+          
+          echo "Using Wine engine: $ENGINE"
+      
+      - name: Create Wineskin wrapper
+        run: |
+          cd wineskin-build
+          
+          # Create app bundle structure
+          mkdir -p "RC41.app/Contents/MacOS"
+          mkdir -p "RC41.app/Contents/Resources"
+          
+          # Create Info.plist
+          cat > "RC41.app/Contents/Info.plist" << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleDevelopmentRegion</key>
+              <string>English</string>
+              <key>CFBundleExecutable</key>
+              <string>Rc41</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.rc41.calculator</string>
+              <key>CFBundleInfoDictionaryVersion</key>
+              <string>6.0</string>
+              <key>CFBundleName</key>
+              <string>RC41</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>CFBundleShortVersionString</key>
+              <string>${{ inputs.version }}</string>
+              <key>CFBundleVersion</key>
+              <string>${{ inputs.version }}</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>10.13</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+          
+          # Create launcher script
+          cat > "RC41.app/Contents/MacOS/Rc41" << 'EOFSCRIPT'
+          #!/bin/bash
+          WINEPREFIX="$HOME/.wine-rc41" wine "../Resources/Rc41.exe"
+          EOFSCRIPT
+          
+          chmod +x "RC41.app/Contents/MacOS/Rc41"
+          
+          # Copy Windows exe
+          cp ../Rc41.exe "RC41.app/Contents/Resources/"
+          
+          # Create README
+          cat > "RC41.app/Contents/Resources/README.txt" << 'EOFREADME'
+          RC41 HP Calculator Emulator - macOS Wine Wrapper
+          
+          This is a Wine wrapper for running RC41 on macOS.
+          
+          Requirements:
+          - Wine must be installed (brew install wine-stable or wine-crossover)
+          - First run may take longer as Wine initializes
+          
+          Architecture: ${{ matrix.arch }}
+          Version: ${{ inputs.version }}
+          EOFREADME
+      
+      - name: Create DMG
+        run: |
+          cd wineskin-build
+          create-dmg \
+            --volname "RC41 v${{ inputs.version }}" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "RC41.app" 175 120 \
+            --hide-extension "RC41.app" \
+            --app-drop-link 425 120 \
+            "../RC41-${{ matrix.arch }}-v${{ inputs.version }}.dmg" \
+            "RC41.app" || cp -r RC41.app "../RC41-${{ matrix.arch }}-v${{ inputs.version }}.app"
+      
+      - name: Create ZIP fallback
+        run: |
+          cd wineskin-build
+          if [ -d "RC41.app" ]; then
+            zip -r "../RC41-${{ matrix.arch }}-v${{ inputs.version }}.zip" "RC41.app"
+          fi
+      
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Rc41-macos-${{ matrix.arch }}
+          path: |
+            RC41-${{ matrix.arch }}-v${{ inputs.version }}.dmg
+            RC41-${{ matrix.arch }}-v${{ inputs.version }}.zip
+            RC41-${{ matrix.arch }}-v${{ inputs.version }}.app
           retention-days: 90
+
+  create-release:
+    name: Create Release
+    needs: [build-windows, build-macos-wrappers]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Prepare release files
+        run: |
+          mkdir -p release
+          find artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec cp {} release/ \;
+          ls -lh release/
       
       - name: Create release draft
         uses: softprops/action-gh-release@v2
@@ -57,6 +208,19 @@ jobs:
           tag_name: v${{ inputs.version }}
           name: Release v${{ inputs.version }}
           draft: true
-          files: dist/win-x64/Rc41.exe
+          files: release/*
+          body: |
+            ## RC41 HP Calculator Emulator v${{ inputs.version }}
+            
+            ### Downloads
+            
+            **Windows:**
+            - `Rc41.exe` - Windows x64 executable
+            
+            **macOS:**
+            - `RC41-x86_64-v${{ inputs.version }}.dmg` - macOS Intel (x86_64)
+            - `RC41-arm64-v${{ inputs.version }}.dmg` - macOS Apple Silicon (ARM64)
+            
+            > **Note for macOS users:** These are Wine wrappers. You need to have Wine installed (`brew install wine-stable`).
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
