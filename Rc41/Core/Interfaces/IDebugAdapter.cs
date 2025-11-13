@@ -8,12 +8,13 @@ namespace Rc41.Core.Interfaces
         /// <summary>
         /// Check if trace mode is enabled
         /// </summary>
-        bool Trace();
+        bool IsTraceEnabled();
 
         /// <summary>
         /// Output a trace message
         /// </summary>
-        void Trace(string message);
+        /// <param name="message">The trace message to output</param>
+        void TraceMessage(string message);
 
         /// <summary>
         /// Trace registers (output debug information)
@@ -23,6 +24,7 @@ namespace Rc41.Core.Interfaces
         /// <summary>
         /// Print debug output
         /// </summary>
+        /// <param name="line">The debug line to print</param>
         void DebugPrint(string line);
     }
 }

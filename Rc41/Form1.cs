@@ -536,11 +536,6 @@ namespace Rc41
             return PrinterPowerOn.Checked;
         }
 
-        public void ToPrinter(string line, char justify)
-        {
-            cpu.printer.Print(line, justify);
-        }
-
         private void DebugButton_Click(object sender, EventArgs e)
         {
             this.Width = 1286;
@@ -677,7 +672,7 @@ namespace Rc41
             }
         }
 
-        public string LoadCard()
+        public string? LoadCard()
         {
             DialogResult result;
             result = LoadCardDialog.ShowDialog();
@@ -686,7 +681,7 @@ namespace Rc41
             return null;
         }
 
-        public string SaveCard()
+        public string? SaveCard()
         {
             DialogResult result;
             result = SaveCardDialog.ShowDialog();
@@ -1019,12 +1014,12 @@ namespace Rc41
             if (cpu.GetKaFlag(0x40)) l_Rs.Text = GetUserLabel(0x40);
         }
 
-        public void Trace(string msg)
+        public void TraceMessage(string msg)
         {
             DebugOutput.AppendText(msg + "\r\n");
         }
 
-        public bool Trace()
+        public bool IsTraceEnabled()
         {
             return cb_Trace.Checked;
         }

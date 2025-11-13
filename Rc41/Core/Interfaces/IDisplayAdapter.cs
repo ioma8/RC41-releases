@@ -18,10 +18,5 @@ namespace Rc41.Core.Interfaces
         /// <param name="line">The line to print</param>
         /// <param name="justify">Justification character (L/R)</param>
         void Print(string line, char justify);
-
-        /// <summary>
-        /// Send a line to the printer (alternative method name used in some contexts)
-        /// </summary>
-        void ToPrinter(string line, char justify);
     }
 }

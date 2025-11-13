@@ -27,7 +27,7 @@ namespace Rc41.T_Cpu
             cmd = 0;
             errFlag = false;
             while (cmd == 0) cmd = ram[addr--];
-            if (ui.Trace()) ui.Trace(DecodeInstruction(addr + 1));
+            if (ui.IsTraceEnabled()) ui.TraceMessage(DecodeInstruction(addr + 1));
             if (running == false && cmd == 0x54 && FlagSet(F_NUM_IN)) cmd = 0x1c;
             //            if (debug)
             //            {
@@ -1710,7 +1710,7 @@ namespace Rc41.T_Cpu
             //                fgets(buffer, 2, stdin);
             //            }
             errFlag = false;
-            if (ui.Trace()) ui.TraceRegs();
+            if (ui.IsTraceEnabled()) ui.TraceRegs();
             return addr;
         }
 
