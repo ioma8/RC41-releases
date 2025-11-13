@@ -11,7 +11,6 @@ namespace Rc41.T_Extended
     {
         public void savex()
         {
-            int i;
             int size;
             int addr;
             int rec;

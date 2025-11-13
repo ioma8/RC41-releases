@@ -235,9 +235,9 @@ namespace Rc41
 
         private void ButtonClick(object sender, EventArgs e)
         {
-            if (((Button)sender).Tag.Equals("<prgm>")) ui.Key_Prgm();
-            if (((Button)sender).Tag.Equals("<user>")) ui.Key_User();
-            if (((Button)sender).Tag.Equals("<on>"))
+            if (((Button)sender).Tag?.Equals("<prgm>") == true) ui.Key_Prgm();
+            if (((Button)sender).Tag?.Equals("<user>") == true) ui.Key_User();
+            if (((Button)sender).Tag?.Equals("<on>") == true)
             {
                 if (cpu.calculatorMode == Cpu.CM_SW)
                 {
@@ -461,12 +461,16 @@ namespace Rc41
 
         private void ButtonDown(object sender, MouseEventArgs e)
         {
-            ui.ButtonDown((string)((Button)sender).Tag);
+            var tag = ((Button)sender).Tag as string;
+            if (tag != null)
+                ui.ButtonDown(tag);
         }
 
         private void ButtonUp(object sender, MouseEventArgs e)
         {
-            ui.ButtonUp((string)((Button)sender).Tag);
+            var tag = ((Button)sender).Tag as string;
+            if (tag != null)
+                ui.ButtonUp(tag);
         }
 
         private void b_ShiftClick(object sender, EventArgs e)

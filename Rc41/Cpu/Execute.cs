@@ -12,7 +12,6 @@ namespace Rc41.T_Cpu
         {
             int i;
             int addr;
-            byte b;
             int n;
             string buffer;
 

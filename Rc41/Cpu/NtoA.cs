@@ -10,11 +10,9 @@ namespace Rc41.T_Cpu
     {
         string NtoA(Number a)
         {
-            int p;
             int i;
             string buffer;
             buffer = "";
-            p = 0;
             if (a.sign != 0) buffer += "-";
             buffer += ((char)(a.mantissa[0] + '0')).ToString();
             buffer += ".";

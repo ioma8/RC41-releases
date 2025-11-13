@@ -12,17 +12,14 @@ namespace Rc41.T_Cpu
         {
             int n;
             int m;
-            int p;
             string buffer;
             n = 0;
-            p = 0;
             m = REG_P + 2;
             buffer = "";
             while (m >= REG_M)
             {
                 if (ram[m] == 0 && n != 0) buffer += ((char)0x00).ToString();
-                else if (ram[m] == 0) ;
-                else buffer += ((char)ram[m]).ToString();
+                else if (ram[m] != 0) buffer += ((char)ram[m]).ToString();
                 if (ram[m] != 0) n = -1;
                 m--;
             }

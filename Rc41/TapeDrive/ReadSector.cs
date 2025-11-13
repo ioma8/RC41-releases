@@ -13,9 +13,10 @@ public partial class TapeDrive
         if (s >= 0 && s < 512)
         {
             sectorNumber = s;
-            tapefile.Seek(s * 256, SeekOrigin.Begin);
+            tapefile!.Seek(s * 256, SeekOrigin.Begin);
+#pragma warning disable CA2022 // Partial reads are acceptable for newly created tape files
             tapefile.Read(sector);
-            sectorPtr = 0;
+#pragma warning restore CA2022
             written = false;
         }
     }

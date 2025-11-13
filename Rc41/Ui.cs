@@ -919,11 +919,11 @@ namespace Rc41
                 else if (cmd < 10)
                 {
                     if ((cpu.ram[Cpu.REG_R + 2] & 0x0f) == 0x0f)
-                        cpu.ram[Cpu.REG_R + 2] = (byte)((cpu.ram[Cpu.REG_R + 2] & 0xf0) | cmd);
+                        cpu.ram[Cpu.REG_R + 2] = (byte)((cpu.ram[Cpu.REG_R + 2] & 0xf0) | (byte)cmd);
                     else if ((cpu.ram[Cpu.REG_R + 1] & 0xf0) == 0xf0)
-                        cpu.ram[Cpu.REG_R + 1] = (byte)((cpu.ram[Cpu.REG_R + 1] & 0x0f) | (cmd << 4));
+                        cpu.ram[Cpu.REG_R + 1] = (byte)((cpu.ram[Cpu.REG_R + 1] & 0x0f) | (byte)(cmd << 4));
                     else
-                        cpu.ram[Cpu.REG_R + 1] = (byte)((cpu.ram[Cpu.REG_R + 1] & 0xf0) | cmd);
+                        cpu.ram[Cpu.REG_R + 1] = (byte)((cpu.ram[Cpu.REG_R + 1] & 0xf0) | (byte)cmd);
                 }
                 else if (cmd == 10)
                 {

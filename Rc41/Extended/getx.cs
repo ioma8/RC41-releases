@@ -11,7 +11,6 @@ namespace Rc41.T_Extended
     {
         public void getx()
         {
-            int i;
             int size;
             int addr;
             int rec;

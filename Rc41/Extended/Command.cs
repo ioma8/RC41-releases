@@ -19,7 +19,6 @@ namespace Rc41.T_Extended
         public void Command(byte function)
         {
             string alpha;
-            string a2;
             Number x;
             Number y;
             Number z;
@@ -29,7 +28,6 @@ namespace Rc41.T_Extended
             byte c;
             int b;
             int e;
-            int d;
             int n;
             byte mask;
 

@@ -13,12 +13,11 @@ public partial class TapeDrive
 {
     ICalculatorUI ui;
     Cpu cpu;
-    Stream tapefile;
+    Stream? tapefile;
     byte[] sector = new byte[256];
     public List<string> dir;
     public int dirPos;
     int sectorNumber;
-    int sectorPtr;
     bool written;
     int file_rec;
     int file_regs;

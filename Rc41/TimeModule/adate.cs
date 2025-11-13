@@ -13,7 +13,6 @@ namespace Rc41.T_TimeModule
         {
             int m, d, y;
             int dg;
-            double o, n;
             int days;
             Number x;
             x = cpu.RecallNumber(Cpu.R_X);

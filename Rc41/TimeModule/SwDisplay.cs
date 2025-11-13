@@ -10,8 +10,6 @@ namespace Rc41.T_TimeModule
     {
         public void SwDisplay()
         {
-            int d, h, m, s, hn;
-            int p;
             double t;
             string disp;
             Number x;

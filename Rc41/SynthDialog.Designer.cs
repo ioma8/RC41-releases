@@ -1330,7 +1330,7 @@
 
         private CheckBox cb_ByteJumper;
         private Button OkButton;
-        private Button CancelButton;
+        private new Button CancelButton;
         private ComboBox ByteJumperKey;
         private CheckBox ByteJumperShift;
         private Label label1;

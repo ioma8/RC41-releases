@@ -753,7 +753,7 @@ namespace Rc41.T_Cpu
         };
        
 
-        public string display;
+        public string display = "";
         public bool errFlag;
         public byte[] ram;
         public bool running;
@@ -1399,7 +1399,7 @@ namespace Rc41.T_Cpu
                     Error();
                     return;
                 }
-                file.Read(card, 0, 5);
+                file.ReadExactly(card, 0, 5);
                 file.Close();
                 if (card[0] == 'S') cardReader.Rsts(filename);
                 if (card[0] == 'A') cardReader.Rall(filename);

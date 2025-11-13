@@ -15,7 +15,7 @@ namespace Rc41.T_Extended
             int s;
             int addr;
             int size;
-            List<byte> data;
+            List<byte>? data;
             string exname;
             string flname;
             string alpha = cpu.GetAlpha();

@@ -11,7 +11,6 @@ namespace Rc41.T_Cpu
         string ProgramNumber(ref int adr)
         {
             int b;
-            int p;
             char mode;
             string mant = "";
             string expn = "";
@@ -19,7 +18,6 @@ namespace Rc41.T_Cpu
             char esign;
             string buffer;
             mode = 'M';
-            p = 0;
             sign = ' ';
             esign = ' ';
             while (ram[adr] >= 0x10 && ram[adr] <= 0x1c) adr++;
@@ -37,7 +35,6 @@ namespace Rc41.T_Cpu
                 {
                     if (mode == 'M')
                     {
-                        p = 0;
                         mode = 'E';
                     }
                 }
