@@ -14,7 +14,9 @@ public partial class TapeDrive
         {
             sectorNumber = s;
             tapefile!.Seek(s * 256, SeekOrigin.Begin);
-            tapefile.ReadExactly(sector);
+#pragma warning disable CA2022 // Partial reads are acceptable for newly created tape files
+            tapefile.Read(sector);
+#pragma warning restore CA2022
             written = false;
         }
     }
