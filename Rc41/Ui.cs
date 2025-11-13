@@ -8,7 +8,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Rc41.T_Cpu;
 using Rc41.Core.Interfaces;
 

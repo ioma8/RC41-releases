@@ -21,8 +21,8 @@ namespace Rc41.Core.Interfaces
         bool Fast();
 
         /// <summary>
-        /// Access to the display timer for interval changes
+        /// Set the display timer interval in milliseconds
         /// </summary>
-        System.Windows.Forms.Timer DisplayTimer { get; }
+        void SetDisplayTimerInterval(int intervalMs);
     }
 }

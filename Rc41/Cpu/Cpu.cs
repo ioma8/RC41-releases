@@ -11,7 +11,6 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Rc41.T_TapeDrive;
 using Rc41.T_Printer;
 using Rc41.T_CardReader;

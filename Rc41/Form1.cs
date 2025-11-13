@@ -17,9 +17,6 @@ namespace Rc41
 {
     public partial class Form1 : Form, ICalculatorUI
     {
-        // Explicit interface implementation for DisplayTimer
-        System.Windows.Forms.Timer ITimerAdapter.DisplayTimer => DisplayTimer;
-        
         public Cpu cpu;
         public Debugger debugger;
         public Ui ui;
@@ -519,6 +516,11 @@ namespace Rc41
         public void DisplayTimerEnabled(bool b)
         {
             DisplayTimer.Enabled = b;
+        }
+
+        public void SetDisplayTimerInterval(int intervalMs)
+        {
+            DisplayTimer.Interval = intervalMs;
         }
 
         public char PrinterMode()

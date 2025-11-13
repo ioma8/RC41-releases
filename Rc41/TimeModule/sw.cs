@@ -21,7 +21,7 @@ namespace Rc41.T_TimeModule
             enteringNum = false;
             numEntry = -1;
             SwDisplay();
-            ui.DisplayTimer.Interval = 100;
+            ui.SetDisplayTimerInterval(100);
         }
     }
 }
