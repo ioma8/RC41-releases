@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Rc41.T_Cpu;
+using Rc41.Core.Interfaces;
 
 namespace Rc41
 {
@@ -36,7 +37,7 @@ namespace Rc41
         protected const int K_BST = 0x89;
 
         public Cpu cpu;
-        public Form1 window;
+        public ICalculatorUI ui;
         protected int mode;
         protected int pendingKey;
 
@@ -89,10 +90,10 @@ namespace Rc41
             new Key("",      255,  255,  0xff, 0xff,   0,         0,         0 )
         };
 
-        public Ui(Cpu c, Form1 w)
+        public Ui(Cpu c, ICalculatorUI calculatorUI)
         {
             cpu = c;   
-            window = w;
+            ui = calculatorUI;
             mode = M_BASE;
             pendingKey = -1;
         }
@@ -221,7 +222,7 @@ namespace Rc41
                     mode = M_BASE;
                 }
             }
-            window.Display(cpu.Display(), true);
+            ui.Display(cpu.Display(), true);
         }
 
         string Display()
@@ -304,7 +305,7 @@ namespace Rc41
                 cpu.ram[Cpu.REG_R + 1] = 0xf1;
             }
             cpu.ProgramStep("");
-            window.Display(Display(), true);
+            ui.Display(Display(), true);
         }
 
         public void ProgramAlphaBack()
@@ -328,9 +329,9 @@ namespace Rc41
                 cpu.GotoLine(ln - 1);
             }
             if (cpu.FlagSet(Cpu.F_SYS))
-                window.Display(cpu.Display() + "_", false);
+                ui.Display(cpu.Display() + "_", false);
             else
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
         }
 
         public void AlphaDown(int key)
@@ -339,7 +340,7 @@ namespace Rc41
             byte c;
             c = (cpu.FlagSet(Cpu.F_SHIFT)) ? keys[key].salpha : keys[key].alpha;
             cpu.ClearFlag(Cpu.F_SHIFT);
-            window.Shift(false);
+            ui.Shift(false);
 
             if (mode == M_AARG)
             {
@@ -353,7 +354,7 @@ namespace Rc41
                 if (p < 7)
                 {
                     cpu.ram[Cpu.REG_Q + p] = c;
-                    window.Display(Display(), false);
+                    ui.Display(Display(), false);
                 }
                 return;
             }
@@ -363,7 +364,7 @@ namespace Rc41
                 if (cpu.FlagSet(Cpu.F_PRGM) && (c < 0x80 || c == 0x81))
                 {
                     ProgramAlpha(c);
-                    window.Display(cpu.Display()+"_", false);
+                    ui.Display(cpu.Display()+"_", false);
                     return;
                 }
                 if (!cpu.FlagSet(Cpu.F_SYS) && c < 0x80)
@@ -383,7 +384,7 @@ namespace Rc41
                     cpu.SetFlag(Cpu.F_SYS);
                 }
                 else if (c > 0x81) pendingKey = c;
-                window.Display(Display(), false);
+                ui.Display(Display(), false);
                 
             }
         }
@@ -403,7 +404,7 @@ namespace Rc41
                     cpu.ram[Cpu.REG_R + 1] = 0xff;
                     cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                     cpu.ram[Cpu.REG_E + 2] &= 0xf0;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                 }
                 if (key == K_ARCL)                   // ARCL
                 {
@@ -413,7 +414,7 @@ namespace Rc41
                     cpu.ram[Cpu.REG_R + 1] = 0xff;
                     cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                     cpu.ram[Cpu.REG_E + 2] &= 0xf0;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                 }
                 if (key == K_BS)                     // BS
                 {
@@ -435,7 +436,7 @@ namespace Rc41
                     {
                         for (i = Cpu.REG_M; i <= Cpu.REG_P + 2; i++) cpu.ram[i] = 0x00;
                     }
-                    window.Display(Display(), false);
+                    ui.Display(Display(), false);
                 }
                 if (key == K_CLA)                  // CLA
                 {
@@ -444,12 +445,12 @@ namespace Rc41
                         cpu.ram[Cpu.REG_R + 1] = 0x87;
                         cpu.ram[Cpu.REG_R + 0] = 0x00;
                         cpu.Execute();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     cpu.ClearFlag(Cpu.F_SYS);
                     for (i = Cpu.REG_M; i < Cpu.REG_P + 3; i++) cpu.ram[i] = 0x00;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                 }
 
                 if (key == K_RS)
@@ -459,30 +460,30 @@ namespace Rc41
                         if (cpu.running)
                         {
                             cpu.running = false;
-                            window.RunTimerEnabled(false);
+                            ui.RunTimerEnabled(false);
                         }
                         else
                         {
                             cpu.goose = "\x81           ";
-                            window.Display(cpu.goose, true);
+                            ui.Display(cpu.goose, true);
                             cpu.ram[Cpu.REG_E + 0] = 0xff;
                             cpu.ram[Cpu.REG_E + 1] |= 0x0f;
                             cpu.running = true;
-                            window.RunTimerEnabled(true);
+                            ui.RunTimerEnabled(true);
                         }
                         return;
                     }
                     cpu.ram[Cpu.REG_R + 1] = 0x84;
                     cpu.ram[Cpu.REG_R + 0] = 0x00;
                     cpu.Execute();
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                     return;
                 }
                 if (key == K_AVIEW) {
                     cpu.ram[Cpu.REG_R + 1] = 0x7e;
                     cpu.ram[Cpu.REG_R + 0] = 0x00;
                     cpu.Execute();
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                     return;
                 }
             }
@@ -496,15 +497,15 @@ namespace Rc41
                     if (i >= Cpu.REG_Q)
                     {
                         cpu.ram[i] = 0x00;
-                        window.Display(Display(), false);
+                        ui.Display(Display(), false);
                     }
                     else
                     {
                         mode = M_BASE;
                         cpu.ClearFlag(Cpu.F_SYS);
                         cpu.ClearFlag(Cpu.F_ALPHA);
-                        window.Alpha(false);
-                        window.Display(cpu.Display(), false);
+                        ui.Alpha(false);
+                        ui.Display(cpu.Display(), false);
                     }
                     return;
                 }
@@ -534,7 +535,7 @@ namespace Rc41
                 if (cpu.FlagSet(Cpu.F_SHIFT)) cmd = keys[key].scmd;
                 else cmd = keys[key].cmd;
                 cpu.ClearFlag(Cpu.F_SHIFT);
-                window.Shift(false);
+                ui.Shift(false);
                 if (cmd == Cpu.CMD_RS)
                 {
                     cpu.catPause = !cpu.catPause;
@@ -544,7 +545,7 @@ namespace Rc41
                 {
                     cpu.catPause = false;
                     cpu.ClearFlag(Cpu.F_CAT);
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                 }
                 if (cmd == Cpu.CMD_SST)
                 {
@@ -557,8 +558,8 @@ namespace Rc41
                         b = ((cpu.ram[Cpu.REG_R + 1] << 8) | (cpu.ram[Cpu.REG_R + 0])) + 1;
                         if (cpu.catalog[b].catalog == (cpu.ram[Cpu.REG_R + 2] & 0x0f))
                         {
-                            window.Display(cpu.catalog[b].name, true);
-                            if (window.PrinterMode() == 'T') window.Print(cpu.catalog[b].name, 'L');
+                            ui.Display(cpu.catalog[b].name, true);
+                            if (ui.PrinterMode() == 'T') ui.Print(cpu.catalog[b].name, 'L');
                             cpu.ram[Cpu.REG_R + 1] = (byte)(b / 256);
                             cpu.ram[Cpu.REG_R + 0] = (byte)(b % 256);
                         }
@@ -566,7 +567,7 @@ namespace Rc41
                         {
                             cpu.ClearFlag(Cpu.F_CAT);
                             cpu.catPause = false;
-                            window.Display(cpu.Display(), true);
+                            ui.Display(cpu.Display(), true);
                         }
                     }
 
@@ -582,8 +583,8 @@ namespace Rc41
                         b = ((cpu.ram[Cpu.REG_R + 1] << 8) | (cpu.ram[Cpu.REG_R + 0])) - 1;
                         if (cpu.catalog[b].catalog == (cpu.ram[Cpu.REG_R + 2] & 0x0f))
                         {
-                            window.Display(cpu.catalog[b].name, true);
-                            if (window.PrinterMode() == 'T') window.Print(cpu.catalog[b].name, 'L');
+                            ui.Display(cpu.catalog[b].name, true);
+                            if (ui.PrinterMode() == 'T') ui.Print(cpu.catalog[b].name, 'L');
                             cpu.ram[Cpu.REG_R + 1] = (byte)(b / 256);
                             cpu.ram[Cpu.REG_R + 0] = (byte)(b % 256);
                         }
@@ -598,13 +599,13 @@ namespace Rc41
                 if (cpu.FlagSet(Cpu.F_SHIFT)) keycode = keys[key].skeycode;
                 else keycode = keys[key].keycode;
                 cpu.ClearFlag(Cpu.F_SHIFT);
-                window.Shift(false);
+                ui.Shift(false);
                 name = "";
                 i = Cpu.REG_Q;
                 while (i <= Cpu.REG_Q + 6 && cpu.ram[i] != 0x00) name += (char)cpu.ram[i++];
                 cpu.Asn(name, keycode);
                 mode = M_BASE;
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
                 return;
             }
 
@@ -621,46 +622,46 @@ namespace Rc41
                         if (cpu.ram[addr+1] == 0x04 && cpu.ram[addr+0] == 0x02)         // DEL
                         {
                             cpu.ClearFlag(Cpu.F_SHIFT);
-                            window.Shift(false);
+                            ui.Shift(false);
                             cpu.ram[Cpu.REG_R + 0] = Cpu.CMD_DEL;
                             cpu.ram[Cpu.REG_R + 1] = 0xff;
                             cpu.ram[Cpu.REG_R + 2] |= 0x0f;
                             cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                             mode = M_NARG;
-                            window.Display(Display(), true);
+                            ui.Display(Display(), true);
                             return;
                         }
                         if (cpu.ram[addr + 1] == 0x04 && cpu.ram[addr + 0] == 0x04)         // CLP
                         {
                             cpu.ClearFlag(Cpu.F_SHIFT);
-                            window.Shift(false);
+                            ui.Shift(false);
                             cpu.ram[Cpu.REG_R + 0] = Cpu.CMD_CLP;
                             cpu.ram[Cpu.REG_R + 1] = 0xff;
                             cpu.ram[Cpu.REG_R + 2] |= 0x0f;
                             cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                             mode = M_NARG;
-                            window.Display(Display(), true);
+                            ui.Display(Display(), true);
                             return;
                         }
                         if (cpu.ram[addr + 1] == 0x04 && cpu.ram[addr + 0] == 0x06)         // SIZE
                         {
                             cpu.ClearFlag(Cpu.F_SHIFT);
-                            window.Shift(false);
+                            ui.Shift(false);
                             cpu.ram[Cpu.REG_R + 0] = Cpu.CMD_SIZE;
                             cpu.ram[Cpu.REG_R + 1] = 0xff;
                             cpu.ram[Cpu.REG_R + 2] |= 0x0f;
                             cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                             mode = M_NARG;
-                            window.Display(Display(), true);
+                            ui.Display(Display(), true);
                             return;
                         }
                         if (cpu.ram[addr + 1] == 0x04 && cpu.ram[addr + 0] == 0x0a)         // PACK
                         {
                             cpu.ClearFlag(Cpu.F_SHIFT);
-                            window.Shift(false);
+                            ui.Shift(false);
                             cpu.Pack();
                             mode = M_BASE;
-                            window.Display(cpu.Display(), true);
+                            ui.Display(cpu.Display(), true);
                             return;
                         }
                         if (cpu.ram[addr + 1] <= 0x0f)
@@ -680,8 +681,8 @@ namespace Rc41
                                 cpu.ram[Cpu.REG_E + 2] &= 0xf0;
                                 mode = M_NARG;
                                 cpu.ClearFlag(Cpu.F_SHIFT);
-                                window.Shift(false);
-                                window.Display(Display(), true);
+                                ui.Shift(false);
+                                ui.Display(Display(), true);
                                 return;
 
                             }
@@ -694,16 +695,16 @@ namespace Rc41
                             cpu.ram[Cpu.REG_R + 0] = cpu.ram[addr + 0];
                         }
                         cpu.ClearFlag(Cpu.F_SHIFT);
-                        window.Shift(false);
+                        ui.Shift(false);
                         cpu.Execute();
                         return;
                     }
                     if (SearchKaPrograms(keycode))
                     {
                         cpu.ClearFlag(Cpu.F_SHIFT);
-                        window.Shift(false);
+                        ui.Shift(false);
                         cpu.running = true;
-                        window.RunTimerEnabled(true);
+                        ui.RunTimerEnabled(true);
                         return;
                     }
                 }
@@ -715,7 +716,7 @@ namespace Rc41
             if (cmd == Cpu.CMD_BS && cpu.FlagSet(Cpu.F_MSG))
             {
                 cpu.ClearFlag(Cpu.F_MSG);
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
                 return;
             }
             cpu.ClearFlag(Cpu.F_MSG);
@@ -723,13 +724,13 @@ namespace Rc41
             if (mode == M_BASE)
             {
                 cpu.ClearFlag(Cpu.F_SHIFT);
-                window.Shift(false);
+                ui.Shift(false);
                 if (cmd == 34 && cpu.FlagSet(Cpu.F_SYS)) cmd = 202;
                 if (cmd < 12 || cmd == 202)
                 {
                     if (cmd == 202) cmd = 12;
                     AddNumber((char)cmd);
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                     return;
                 }
 
@@ -738,7 +739,7 @@ namespace Rc41
                     if (cpu.FlagSet(Cpu.F_PRGM) && !cpu.FlagSet(Cpu.F_SYS))
                     {
                         cpu.Del(1);
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     else if (cpu.FlagSet(Cpu.F_SYS))
@@ -761,7 +762,7 @@ namespace Rc41
                     if (cpu.FlagSet(Cpu.F_PRGM))
                     {
                         cpu.Bst();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     else
@@ -775,13 +776,13 @@ namespace Rc41
                     if (cpu.FlagSet(Cpu.F_PRGM))
                     {
                         cpu.Sst();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     else
                     {
                         cpu.Sst();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                 }
@@ -793,17 +794,17 @@ namespace Rc41
                         if (cpu.running)
                         {
                             cpu.running = false;
-                            window.RunTimerEnabled(false);
-                            window.Display(cpu.Display(), true);
+                            ui.RunTimerEnabled(false);
+                            ui.Display(cpu.Display(), true);
                         }
                         else
                         {
                             cpu.goose = "\x81           ";
-                            window.Display(cpu.goose, true);
+                            ui.Display(cpu.goose, true);
                             cpu.ram[Cpu.REG_E + 0] = 0xff;
                             cpu.ram[Cpu.REG_E + 1] |= 0x0f;
                             cpu.running = true;
-                            window.RunTimerEnabled(true);
+                            ui.RunTimerEnabled(true);
                         }
                         return;
                     }
@@ -833,7 +834,7 @@ namespace Rc41
                         cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                         cpu.ram[Cpu.REG_E + 2] &= 0xf0;
                         mode = M_NARG;
-                        window.Display(Display(), true);
+                        ui.Display(Display(), true);
                         return;
                     }
                     else
@@ -846,7 +847,7 @@ namespace Rc41
                         cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                         cpu.ram[Cpu.REG_E + 2] &= 0xf0;
                         mode = M_NARG;
-                        window.Display(Display(), true);
+                        ui.Display(Display(), true);
                     }
                     return;
                 }
@@ -860,14 +861,14 @@ namespace Rc41
                         cpu.ram[Cpu.REG_R+1] == 0xff)
                     {
                         mode = M_BASE;
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if ((cpu.catalog[cpu.ram[Cpu.REG_R + 0]].flags & 0x003) == 3 &&
                         cpu.ram[Cpu.REG_R + 1] == 0xff && (cpu.ram[Cpu.REG_R+2] & 0x0f) == 0x0f)
                     {
                         mode = M_BASE;
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if ((cpu.ram[Cpu.REG_R + 1] & 0xf0) != 0xf0)
@@ -880,7 +881,7 @@ namespace Rc41
                     {
                         cpu.ram[Cpu.REG_R + 2] |= 0x0f;
                     }
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                     return;
                 }
                 if ((cpu.ram[Cpu.REG_E + 1] & N_ST) != 0)
@@ -901,19 +902,19 @@ namespace Rc41
                         if ((cpu.ram[Cpu.REG_R+2] & 0x0f) != 0x0f) return;
                         mode = M_BASE;
                         cpu.GtoEnd();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if ((cpu.ram[Cpu.REG_E + 1] & N_IND) != 0)
                     {
                         cpu.ram[Cpu.REG_E + 1] |= N_ST;
-                        window.Display(Display(), true);
+                        ui.Display(Display(), true);
                         return;
                     }
                     cpu.ram[Cpu.REG_R + 0] = (byte)cpu.CMD_GTO_DOT;
                     cpu.ram[Cpu.REG_E + 1] |= N_DOT;
                     cpu.ram[Cpu.REG_R + 2] |= 0x0f;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                     return;
                 }
                 else if (cmd < 10)
@@ -946,7 +947,7 @@ namespace Rc41
                         i += (cpu.ram[Cpu.REG_R + 2] & 0x0f) * 100;
                         mode = M_BASE;
                         if (cpu.FlagSet(Cpu.F_PRGM)) cpu.Del(i);
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if (cpu.ram[Cpu.REG_R + 0] == Cpu.CMD_SIZE)
@@ -955,7 +956,7 @@ namespace Rc41
                         i += (cpu.ram[Cpu.REG_R + 2] & 0x0f) * 100;
                         mode = M_BASE;
                         cpu.Size(i);
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if (cpu.ram[Cpu.REG_R + 0] == cpu.CMD_GTO_DOT)
@@ -964,7 +965,7 @@ namespace Rc41
                         i += (cpu.ram[Cpu.REG_R + 2] & 0x0f) * 100;
                         mode = M_BASE;
                         cpu.GotoLine(i);
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if (cpu.ram[Cpu.REG_R + 0] == cpu.CMD_NEWM)
@@ -973,7 +974,7 @@ namespace Rc41
                         i += (cpu.ram[Cpu.REG_R + 2] & 0x0f) * 100;
                         mode = M_BASE;
                         cpu.tapeDrive.Command(3, i);
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if (cpu.ram[Cpu.REG_R + 0] == cpu.CMD_LIST)
@@ -983,7 +984,7 @@ namespace Rc41
                         cpu.printer.arg = i;
                         mode = M_BASE;
                         cpu.printer.Command(7);
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if (cpu.ram[Cpu.REG_R + 0] == cpu.CMD_GTO_ALPHA)
@@ -992,7 +993,7 @@ namespace Rc41
                         cpu.ram[Cpu.REG_R + 0] = 0x00;
                         mode = M_BASE;
                         cpu.Execute();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     if (cpu.ram[Cpu.REG_R+0] == Cpu.CMD_CAT)
@@ -1007,29 +1008,29 @@ namespace Rc41
                         cpu.ram[Cpu.REG_R + 1] = 0;
                         if (b == 1)
                         {
-                            window.DisplayTimerEnabled(false);
+                            ui.DisplayTimerEnabled(false);
                             i = (cpu.ram[Cpu.REG_C + 2] << 4) | ((cpu.ram[Cpu.REG_C + 1] & 0xf0) >> 4);
                             cpu.ram[Cpu.REG_B + 1] = (byte)((i >> 8) & 0x0f);
                             cpu.ram[Cpu.REG_B + 0] = (byte)(i & 0xff);
                             cpu.catSize = cpu.FromPtr(i);
                             cpu.ShowNextGlobal(true);
-                            window.DisplayTimerEnabled(true);
+                            ui.DisplayTimerEnabled(true);
                         }
                         if (b == 2)
                         {
-                            window.DisplayTimerEnabled(false);
+                            ui.DisplayTimerEnabled(false);
                             cpu.ram[Cpu.REG_R + 0] = 135;
-                            window.Display(cpu.catalog[135].name, true);
-                            if (window.PrinterMode() == 'T') window.Print(cpu.catalog[135].name, 'L');
-                            window.DisplayTimerEnabled(true);
+                            ui.Display(cpu.catalog[135].name, true);
+                            if (ui.PrinterMode() == 'T') ui.Print(cpu.catalog[135].name, 'L');
+                            ui.DisplayTimerEnabled(true);
                         }
                         if (b == 3)
                         {
-                            window.DisplayTimerEnabled(false);
+                            ui.DisplayTimerEnabled(false);
                             cpu.ram[Cpu.REG_R + 0] = 12;
-                            window.Display(cpu.catalog[12].name, true);
-                            if (window.PrinterMode() == 'T') window.Print(cpu.catalog[12].name, 'L');
-                            window.DisplayTimerEnabled(true);
+                            ui.Display(cpu.catalog[12].name, true);
+                            if (ui.PrinterMode() == 'T') ui.Print(cpu.catalog[12].name, 'L');
+                            ui.DisplayTimerEnabled(true);
                         }
                         return;
                     }
@@ -1040,7 +1041,7 @@ namespace Rc41
                         cpu.ram[Cpu.REG_R + 0] = post;
                         mode = M_BASE;
                         cpu.Execute();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     cmd = cpu.ram[Cpu.REG_R + 0];
@@ -1051,7 +1052,7 @@ namespace Rc41
                         cpu.ram[Cpu.REG_R + 0] = (byte)(post | 0x80);
                         mode = M_BASE;
                         cpu.Execute();
-                        window.Display(cpu.Display(), true);
+                        ui.Display(cpu.Display(), true);
                         return;
                     }
                     post = (byte)(((cpu.ram[Cpu.REG_R + 1] >> 4) * 10) + (cpu.ram[Cpu.REG_R + 1] & 0x0f));
@@ -1060,10 +1061,10 @@ namespace Rc41
                     cpu.ram[Cpu.REG_R + 0] = post;
                     mode = M_BASE;
                     cpu.Execute();
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                     return;
                 }
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
                 return;
             }
         }
@@ -1147,7 +1148,7 @@ namespace Rc41
                         cpu.ram[Cpu.REG_E + 1] &= 0x0f;
                         cpu.ram[Cpu.REG_E + 2] &= 0xf0;
                         mode = M_NARG;
-                        window.Display(Display(), true);
+                        ui.Display(Display(), true);
                         return;
                     }
                     return;
@@ -1163,7 +1164,7 @@ namespace Rc41
                 {
                     cpu.Message("NONEXISTENT");
                     cpu.Error();
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                 }
             }
 
@@ -1202,7 +1203,7 @@ namespace Rc41
                     cpu.ram[Cpu.REG_R + 0] = 0x00;
                     mode = M_BASE;
                     cpu.Execute();
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                     return;
                 }
                 addr = cpu.FindGlobal(buffer);
@@ -1223,7 +1224,7 @@ namespace Rc41
                     cpu.Error();
                 }
                 mode = M_BASE;
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
             }
 
             if (cmd == cpu.CMD_GTO_DOT)
@@ -1246,7 +1247,7 @@ namespace Rc41
                     cpu.Error();
                 }
                 mode = M_BASE;
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
             }
 
             if (cmd == cpu.CMD_LBL_A)
@@ -1278,7 +1279,7 @@ namespace Rc41
             {
                 cpu.printer.Prp(buffer, -1);
                 mode = M_BASE;
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
                 return;
             }
 
@@ -1286,14 +1287,14 @@ namespace Rc41
             {
                 cpu.Clp(buffer);
                 mode = M_BASE;
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
                 return;
             }
 
             if (cmd == Cpu.CMD_ASN)
             {
                 mode = M_ASN;
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
                 return;
             }
         }
@@ -1310,7 +1311,7 @@ namespace Rc41
                 if (cpu.FlagSet(Cpu.F_SYS) && !cpu.FlagSet(Cpu.F_ALPHA)) cpu.EndNumber();
                 if (cpu.FlagSet(Cpu.F_ALPHA)) cpu.ClearFlag(Cpu.F_ALPHA);
                 else cpu.SetFlag(Cpu.F_ALPHA);
-                window.Alpha(cpu.FlagSet(Cpu.F_ALPHA));
+                ui.Alpha(cpu.FlagSet(Cpu.F_ALPHA));
                 if (cpu.FlagSet(Cpu.F_PRGM) && cpu.FlagSet(Cpu.F_PARTIAL))
                 {
                     cpu.alphaPos++;
@@ -1322,26 +1323,26 @@ namespace Rc41
                 }
                 cpu.ClearFlag(Cpu.F_PARTIAL);
                 if (!cpu.FlagSet(Cpu.F_ALPHA) && cpu.FlagSet(Cpu.F_SYS)) cpu.ClearFlag(Cpu.F_SYS);
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
             }
             else if (mode == M_NARG && (cpu.catalog[cpu.ram[Cpu.REG_R+0]].flags & 0x10) != 0x00)
             {
                 cpu.SetFlag(Cpu.F_SYS);
                 cpu.SetFlag(Cpu.F_ALPHA);
-                window.Alpha(true);
+                ui.Alpha(true);
                 if (cpu.ram[Cpu.REG_R + 0] == Cpu.CMD_XEQ) cpu.ram[Cpu.REG_R + 0] = (byte)cpu.CMD_XEQ_A;
                 if (cpu.ram[Cpu.REG_R + 0] == Cpu.CMD_LBL) cpu.ram[Cpu.REG_R + 0] = (byte)cpu.CMD_LBL_A;
                 if (cpu.ram[Cpu.REG_R + 0] == Cpu.CMD_GTO) cpu.ram[Cpu.REG_R + 0] = (byte)cpu.CMD_GTO_ALPHA;
                 for (var i = Cpu.REG_Q; i <= Cpu.REG_Q + 6; i++)
                     cpu.ram[i] = 0x00;
                 mode = M_AARG;
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
             }
             else if (mode == M_AARG)
             {
                 cpu.ClearFlag(Cpu.F_SYS);
                 cpu.ClearFlag(Cpu.F_ALPHA);
-                window.Alpha(cpu.FlagSet(Cpu.F_ALPHA));
+                ui.Alpha(cpu.FlagSet(Cpu.F_ALPHA));
                 mode = M_BASE;
                 XeqAlphaArg();
             }
@@ -1362,9 +1363,9 @@ namespace Rc41
                 cpu.ClearFlag(Cpu.F_PARTIAL);
                 cpu.ClearFlag(Cpu.F_ALPHA);
             }
-            window.Prog(cpu.FlagSet(Cpu.F_PRGM));
-            window.Alpha(cpu.FlagSet(Cpu.F_ALPHA));
-            window.Display(cpu.Display(), true);
+            ui.Prog(cpu.FlagSet(Cpu.F_PRGM));
+            ui.Alpha(cpu.FlagSet(Cpu.F_ALPHA));
+            ui.Display(cpu.Display(), true);
         }
 
         public void Key_Shift()
@@ -1385,10 +1386,10 @@ namespace Rc41
                 if ((cpu.catalog[cpu.ram[Cpu.REG_R+0]].flags & 0x08) != 0) {
                     cpu.ram[Cpu.REG_E + 1] |= N_IND;
                     cpu.ram[Cpu.REG_R + 1] = 0xff;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                 }
             }
-            window.Shift(cpu.FlagSet(Cpu.F_SHIFT));
+            ui.Shift(cpu.FlagSet(Cpu.F_SHIFT));
         }
 
         public void Key_User()
@@ -1400,7 +1401,7 @@ namespace Rc41
             if (mode != M_BASE) return;
             if (cpu.FlagSet(Cpu.F_USER)) cpu.ClearFlag(Cpu.F_USER);
             else cpu.SetFlag(Cpu.F_USER);
-            window.User(cpu.FlagSet(Cpu.F_USER));
+            ui.User(cpu.FlagSet(Cpu.F_USER));
         }
 
         public void ButtonDown(string tag)
@@ -1417,7 +1418,7 @@ namespace Rc41
                 if (tag.Equals("38"))
                 {
                     cpu.dirMode = false;
-                    window.Display(cpu.Display(), true);
+                    ui.Display(cpu.Display(), true);
                     return;
                 }
                 return;
@@ -1426,7 +1427,7 @@ namespace Rc41
             if (cpu.FlagSet(Cpu.F_MSG))
             {
                 cpu.ClearFlag(Cpu.F_MSG);
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
                 if (tag.Equals("44"))
                 {
                     pendingKey = -1;

@@ -19,5 +19,10 @@ namespace Rc41.Core.Interfaces
         /// Trace registers (output debug information)
         /// </summary>
         void TraceRegs();
+
+        /// <summary>
+        /// Print debug output
+        /// </summary>
+        void DebugPrint(string line);
     }
 }
