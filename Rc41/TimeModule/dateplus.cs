@@ -12,8 +12,6 @@ namespace Rc41.T_TimeModule
         public void dateplus()
         {
             int m, d, y;
-            int dg;
-            double o, n;
             int days;
             Number x;
             Number ret;

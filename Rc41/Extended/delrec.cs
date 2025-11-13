@@ -11,7 +11,6 @@ namespace Rc41.T_Extended
         public void delrec()
         {
             int i;
-            int j;
             int addr;
             int bottom;
             int size;

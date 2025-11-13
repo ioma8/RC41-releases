@@ -13,9 +13,8 @@ public partial class TapeDrive
         if (s >= 0 && s < 512)
         {
             sectorNumber = s;
-            tapefile.Seek(s * 256, SeekOrigin.Begin);
+            tapefile!.Seek(s * 256, SeekOrigin.Begin);
             tapefile.Read(sector);
-            sectorPtr = 0;
             written = false;
         }
     }

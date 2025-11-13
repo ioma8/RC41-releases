@@ -11,11 +11,9 @@ namespace Rc41.T_Cpu
         public string GetAlpha()
         {
             int m;
-            int p;
             string buffer;
             m = REG_P + 2;
             while (m >= REG_M && ram[m] == 0x00) m--;
-            p = 0;
             buffer = "";
             while (m >= REG_M)
             {

@@ -26,7 +26,7 @@ namespace Rc41.T_CardReader
             Number a;
             Number b;
             Number x;
-            string filename;
+            string? filename;
             Stream file;
 
             if (function == 2)
@@ -36,11 +36,6 @@ namespace Rc41.T_CardReader
                 r00 = cpu.ram[Cpu.REG_C + 2] << 4 | cpu.ram[Cpu.REG_C + 1] >> 4 & 0x0f;
 
                 file = File.Open(filename, FileMode.Open, FileAccess.ReadWrite);
-                if (file == null)
-                {
-                    MessageBox.Show($"Could not open card file: {filename}");
-                    return addr;
-                }
 
                 len = Cpu.RAMTOP - r00;
                 r00 *= 7;
@@ -102,11 +97,6 @@ namespace Rc41.T_CardReader
                 filename = ui.LoadCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.Open, FileAccess.ReadWrite);
-                if (file == null)
-                {
-                    MessageBox.Show($"Could not open card file: {filename}");
-                    return addr;
-                }
                 file.Read(card, 0, 5);
                 if (card[0] != 'D')
                 {
@@ -126,11 +116,6 @@ namespace Rc41.T_CardReader
                 filename = ui.LoadCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.Open, FileAccess.ReadWrite);
-                if (file == null)
-                {
-                    MessageBox.Show($"Could not open card file: {filename}");
-                    return addr;
-                }
                 file.Read(card, 0, 5);
                 cpu.Message($"TYPE {(char)card[0]} TR 01");
                 file.Close();
@@ -142,11 +127,6 @@ namespace Rc41.T_CardReader
                 filename = ui.SaveCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                if (file == null)
-                {
-                    MessageBox.Show($"Could not open card file: {filename}");
-                    return addr;
-                }
                 r00 = cpu.ram[Cpu.REG_C + 2] << 4 | cpu.ram[Cpu.REG_C + 1] >> 4 & 0x0f;
                 len = Cpu.RAMTOP;
                 r00 *= 7;
@@ -255,11 +235,6 @@ namespace Rc41.T_CardReader
                 filename = ui.SaveCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                if (file == null)
-                {
-                    MessageBox.Show($"Could not open card file: {filename}");
-                    return addr;
-                }
                 len = 11;
                 address = 0x0c0 * 7;
                 while (cpu.ram[address + 6] == 0xf0)

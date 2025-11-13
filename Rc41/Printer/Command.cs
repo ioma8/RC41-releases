@@ -11,7 +11,6 @@ namespace Rc41.T_Printer
     {
         public void Command(byte function)
         {
-            int addr;
             //  int    end;
             int i;
             int m;
@@ -20,7 +19,6 @@ namespace Rc41.T_Printer
             int f;
             int s;
             int e;
-            int c;
             int be;
             int reg;
             int r00;
@@ -45,11 +43,13 @@ namespace Rc41.T_Printer
                 while (m >= Cpu.REG_M)
                 {
                     if (cpu.ram[m] == 0 && n != 0) buffer += "_";
-                    else if (cpu.ram[m] == 0) ;
-                    else if (cpu.ram[m] < ' ' || cpu.ram[m] > 0x7e) PrintToBuffer((byte)'#');
-                    else if (cpu.ram[m] >= 'A' && cpu.ram[m] <= 'Z' && cpu.FlagSet(13) != false)
-                        PrintToBuffer((byte)(cpu.ram[m] + 32));
-                    else PrintToBuffer(cpu.ram[m]);
+                    else if (cpu.ram[m] != 0)
+                    {
+                        if (cpu.ram[m] < ' ' || cpu.ram[m] > 0x7e) PrintToBuffer((byte)'#');
+                        else if (cpu.ram[m] >= 'A' && cpu.ram[m] <= 'Z' && cpu.FlagSet(13) != false)
+                            PrintToBuffer((byte)(cpu.ram[m] + 32));
+                        else PrintToBuffer(cpu.ram[m]);
+                    }
                     if (cpu.ram[m] != 0) n = -1;
                     m--;
                 }
@@ -193,16 +193,18 @@ namespace Rc41.T_Printer
                 while (m >= Cpu.REG_M)
                 {
                     if (cpu.ram[m] == 0 && n != 0) buffer += "_";
-                    else if (cpu.ram[m] == 0) ;
-                    else if (cpu.ram[m] < ' ' || cpu.ram[m] > 0x7e) buffer += "#";
-                    else
+                    else if (cpu.ram[m] != 0)
                     {
-                        ch = (char)cpu.ram[m];
-                        if (cpu.FlagSet(13))
+                        if (cpu.ram[m] < ' ' || cpu.ram[m] > 0x7e) buffer += "#";
+                        else
                         {
-                            if (ch >= 'A' && ch <= 'Z') ch = (char)((byte)ch + 32);
+                            ch = (char)cpu.ram[m];
+                            if (cpu.FlagSet(13))
+                            {
+                                if (ch >= 'A' && ch <= 'Z') ch = (char)((byte)ch + 32);
+                            }
+                            buffer += ch.ToString();
                         }
-                        buffer += ch.ToString();
                     }
                     if (cpu.ram[m] != 0) n = -1;
                     m--;

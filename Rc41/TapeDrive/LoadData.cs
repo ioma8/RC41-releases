@@ -8,9 +8,8 @@ namespace Rc41.T_TapeDrive
 {
     public partial class TapeDrive
     {
-        public List<byte> LoadData(string filename)
+        public List<byte>? LoadData(string filename)
         {
-            int i;
             int p;
             int fp;
             int size;

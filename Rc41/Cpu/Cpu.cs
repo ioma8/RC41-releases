@@ -753,7 +753,7 @@ namespace Rc41.T_Cpu
         };
        
 
-        public string display;
+        public string display = "";
         public bool errFlag;
         public byte[] ram;
         public bool running;

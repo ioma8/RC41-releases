@@ -11,10 +11,6 @@ namespace Rc41.T_TimeModule
     {
         public void dow()
         {
-            int m, d, y;
-            int dg;
-            double o, n;
-            int days;
             Number x;
             x = cpu.RecallNumber(Cpu.R_X);
             DateTime? dt = todatetime(x);

@@ -15,7 +15,6 @@ namespace Rc41.T_Extended
             int currentPtr;
             int chr;
             int rec;
-            Number x;
             int start;
             string record;
             string alpha = cpu.GetAlpha();

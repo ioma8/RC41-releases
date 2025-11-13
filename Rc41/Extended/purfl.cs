@@ -16,7 +16,6 @@ namespace Rc41.T_Extended
 
         public void purfl(string alpha)
         {
-            int i;
             int addr;
             int len;
             int src;

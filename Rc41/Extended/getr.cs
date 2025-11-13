@@ -14,7 +14,6 @@ namespace Rc41.T_Extended
             int i;
             int addr;
             int len;
-            int pos;
             int size;
             Number x;
             string alpha = cpu.GetAlpha();

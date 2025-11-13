@@ -12,11 +12,9 @@ namespace Rc41.T_Extended
         {
             int addr;
             int recs;
-            int len;
             int chr;
             int rec;
             int currentPtr;
-            string record;
             string alpha = cpu.GetAlpha();
             if (currentFile <= 0)
             {
@@ -41,7 +39,6 @@ namespace Rc41.T_Extended
                 cpu.Error();
                 return;
             }
-            record = "";
             while (chr < ram[currentPtr] && alpha.Length < 24)
             {
                 alpha += (char)ram[currentPtr - (chr + 1)];

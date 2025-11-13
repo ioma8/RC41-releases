@@ -10,7 +10,6 @@ namespace Rc41.T_Extended
             int m;
             int n;
             int kc;
-            int j;
             string alpha = cpu.GetAlpha();
             Number x = cpu.RecallNumber(Cpu.R_X);
             i = x.Int();
