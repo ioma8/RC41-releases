@@ -17,6 +17,7 @@ using Rc41.T_Printer;
 using Rc41.T_CardReader;
 using Rc41.T_Extended;
 using Rc41.T_TimeModule;
+using Rc41.Core.Interfaces;
 
 namespace Rc41.T_Cpu
 {
@@ -786,7 +787,7 @@ namespace Rc41.T_Cpu
         public Number c;
         public int byteCount;
         public bool linksCleared;
-        public Form1 window;
+        public ICalculatorUI ui;
         public Sound sound;
         public int calculatorMode;
 
@@ -804,10 +805,10 @@ namespace Rc41.T_Cpu
         public int catSize;
         public bool dirMode;
 
-        public Cpu(Form1 w)
+        public Cpu(ICalculatorUI calculatorUI)
         {
             int i;
-            this.window = w;
+            this.ui = calculatorUI;
             dirMode = false;
             calculatorMode = CM_DIRECT;
             ram = new byte[3584];
@@ -851,11 +852,11 @@ namespace Rc41.T_Cpu
             goose = "\x81           ";
             uiMode = 0;
             catPause = false;
-            extended = new Extended(this, w);
-            printer = new Printer(this, w);
-            tapeDrive = new TapeDrive(this, w);
-            cardReader = new CardReader(this, w);
-            timeModule = new TimeModule(this, w);
+            extended = new Extended(this, calculatorUI);
+            printer = new Printer(this, calculatorUI);
+            tapeDrive = new TapeDrive(this, calculatorUI);
+            cardReader = new CardReader(this, calculatorUI);
+            timeModule = new TimeModule(this, calculatorUI);
 
             Init();
             if (Load() == false)
@@ -870,8 +871,8 @@ namespace Rc41.T_Cpu
             for (i = 11; i <= 14; i++) ClearFlag((byte)i);
             for (i = 22; i <= 25; i++) ClearFlag((byte)i);
  //           Annunciators();
-            window.Display(Display(),true);
-            window.DisplayTimerEnabled(true);
+            ui.Display(Display(),true);
+            ui.DisplayTimerEnabled(true);
         }
 
         public int FindCommand(byte b1, byte b2)
@@ -979,7 +980,7 @@ namespace Rc41.T_Cpu
             Init();
             Message("MEMORY LOST");
             Annunciators();
-            window.Display(Display(), true);
+            ui.Display(Display(), true);
         }
 
         public void Reset()
@@ -990,7 +991,7 @@ namespace Rc41.T_Cpu
             ClearFlag(F_ALPHA_IN);
             running = false;
             Annunciators();
-            window.Display(Display(), true);
+            ui.Display(Display(), true);
         }
 
         void Init()
@@ -1054,29 +1055,29 @@ namespace Rc41.T_Cpu
 
         public void Annunciators()
         {
-            window.User(FlagSet(F_USER));
-            window.Shift(FlagSet(F_SHIFT));
-            window.Prog(FlagSet(F_PRGM));
-            window.Alpha(FlagSet(F_ALPHA));
-            window.Flag_0(FlagSet(0));
-            window.Flag_1(FlagSet(1));
-            window.Flag_2(FlagSet(2));
-            window.Flag_3(FlagSet(3));
-            window.Flag_4(FlagSet(4));
+            ui.User(FlagSet(F_USER));
+            ui.Shift(FlagSet(F_SHIFT));
+            ui.Prog(FlagSet(F_PRGM));
+            ui.Alpha(FlagSet(F_ALPHA));
+            ui.Flag_0(FlagSet(0));
+            ui.Flag_1(FlagSet(1));
+            ui.Flag_2(FlagSet(2));
+            ui.Flag_3(FlagSet(3));
+            ui.Flag_4(FlagSet(4));
             if (FlagSet(F_GRAD))
             {
-                window.G(true);
-                window.Rad(true);
+                ui.G(true);
+                ui.Rad(true);
             }
             else if (FlagSet(F_RAD))
             {
-                window.G(false);
-                window.Rad(true);
+                ui.G(false);
+                ui.Rad(true);
             }
             else
             {
-                window.G(false);
-                window.Rad(false);
+                ui.G(false);
+                ui.Rad(false);
             }
         }
 
@@ -1084,8 +1085,8 @@ namespace Rc41.T_Cpu
         {
             if (FlagSet(F_PRGM)) ClearFlag(F_PRGM);
             else SetFlag(F_PRGM);
-            window.Prog(FlagSet(F_PRGM));
-            window.Display(Display(),true);
+            ui.Prog(FlagSet(F_PRGM));
+            ui.Display(Display(),true);
         }
 
         public void Shift()
@@ -1099,21 +1100,21 @@ namespace Rc41.T_Cpu
                     {
                         ram[REG_E + 2] |= 0x01;
                         display = catalog[ram[REG_R + 0]].name + " IND __";
-                        window.Display(display, true);
+                        ui.Display(display, true);
                         ram[REG_R + 2] &= 0xf0;
                         ram[REG_R + 1] = 0xff;
                     }
                     ClearFlag(F_SHIFT);
                 }
             }
-            window.Shift(FlagSet(F_SHIFT));
+            ui.Shift(FlagSet(F_SHIFT));
         }
 
         public void User()
         {
             if (FlagSet(F_USER)) ClearFlag(F_USER);
             else SetFlag(F_USER);
-            window.User(FlagSet(F_USER));
+            ui.User(FlagSet(F_USER));
         }
 
         public void Print()
@@ -1150,7 +1151,7 @@ namespace Rc41.T_Cpu
             {
                 uiMode = 0;
                 ClearFlag(F_CAT);
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
                 return;
             }
             while (ram[addr] < 0xc0 || ram[addr] > 0xcd) addr -= isize(addr);
@@ -1179,8 +1180,8 @@ namespace Rc41.T_Cpu
                     line = "END";
                 }
             }
-            window.Display(line, true);
-            if (window.PrinterMode() == 'T')
+            ui.Display(line, true);
+            if (ui.PrinterMode() == 'T')
             {
                 if (line.StartsWith("LBL")) line = "LBL\x60" + line.Substring(4);
                 if (line.StartsWith("END"))
@@ -1237,8 +1238,8 @@ namespace Rc41.T_Cpu
                     line = "END";
                 }
             }
-            window.Display(line, true);
-            if (window.PrinterMode() == 'T') window.Print(line, 'L');
+            ui.Display(line, true);
+            if (ui.PrinterMode() == 'T') ui.Print(line, 'L');
             addr = ToPtr(addr + 1);
             ram[REG_B + 1] = (byte)((addr >> 8) & 0xff);
             ram[REG_B + 0] = (byte)(addr & 0xff);
@@ -1252,14 +1253,14 @@ namespace Rc41.T_Cpu
                 if (!timeModule.swHold)
                 {
                     timeModule.SwDisplay();
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                 }
                 return;
             }
             if (calculatorMode == CM_CLOCK)
             {
                 timeModule.ClockDisplay();
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
                 return;
             }
             if (running) return;
@@ -1268,7 +1269,7 @@ namespace Rc41.T_Cpu
                 if (tapeDrive.ShowNextDirEntry() == false)
                 {
                     dirMode = false;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                 }
                 return;
             }
@@ -1284,8 +1285,8 @@ namespace Rc41.T_Cpu
                     b = ((ram[REG_R + 1] << 8) | ram[REG_R + 0]) + 1;
                     if (catalog[b].catalog == (ram[REG_R+2] & 0x0f))
                     {
-                        window.Display(catalog[b].name, true);
-                        if (window.PrinterMode() == 'T') printer.Print(catalog[b].name, 'L');
+                        ui.Display(catalog[b].name, true);
+                        if (ui.PrinterMode() == 'T') printer.Print(catalog[b].name, 'L');
                         ram[REG_R + 1] = (byte)(b / 256);
                         ram[REG_R + 0] = (byte)(b & 0xff);
                     }
@@ -1293,7 +1294,7 @@ namespace Rc41.T_Cpu
                     {
                         ClearFlag(F_CAT);
                         catPause = false;
-                        window.Display(Display(), true);
+                        ui.Display(Display(), true);
                     }
                 }
             }
@@ -1306,12 +1307,12 @@ namespace Rc41.T_Cpu
             int limit;
             if (!running)
             {
-                window.RunTimerEnabled(false);
-                window.Display(Display(), true);
+                ui.RunTimerEnabled(false);
+                ui.Display(Display(), true);
                 return;
             }
-            limit = (window.Fast()) ? 100 : 1;
-            window.RunTimerEnabled(false);
+            limit = (ui.Fast()) ? 100 : 1;
+            ui.RunTimerEnabled(false);
             for (i = 0; i < limit; i++)
             {
                 if (running)
@@ -1335,11 +1336,11 @@ namespace Rc41.T_Cpu
                     {
                         running = false;
                         Annunciators();
-                        window.Display(Display(), true);
+                        ui.Display(Display(), true);
                     }
                 }
             }
-            if (running) window.RunTimerEnabled(true);
+            if (running) ui.RunTimerEnabled(true);
         }
 
         public int SearchKaRegisters(byte keycode)
@@ -1403,7 +1404,7 @@ namespace Rc41.T_Cpu
                 file.Close();
                 if (card[0] == 'S') cardReader.Rsts(filename);
                 if (card[0] == 'A') cardReader.Rall(filename);
-                if (card[0] == 'P') { cardReader.Rprg(filename); window.Display(Display(), true); }
+                if (card[0] == 'P') { cardReader.Rprg(filename); ui.Display(Display(), true); }
             }
         }
 

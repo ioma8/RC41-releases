@@ -6,12 +6,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using Rc41.T_Cpu;
+using Rc41.Core.Interfaces;
 
 namespace Rc41.T_TapeDrive;
 
 public partial class TapeDrive
 {
-    Form1 window;
+    ICalculatorUI ui;
     Cpu cpu;
     Stream tapefile;
     byte[] sector = new byte[256];
@@ -30,9 +31,9 @@ public partial class TapeDrive
 
 
 
-    public TapeDrive(Cpu c, Form1 w)
+    public TapeDrive(Cpu c, ICalculatorUI calculatorUI)
     {
-        window = w;
+        ui = calculatorUI;
         cpu = c;
         dir = new List<string>();
         sfree = 0;

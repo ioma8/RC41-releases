@@ -36,7 +36,7 @@ namespace Rc41.T_Cpu
             end = (((ram[REG_C + 1] & 0x0f) << 8) | ram[REG_C + 0]) * 7 + 2;
             r00 = ((ram[REG_C + 2] << 4) | ((ram[REG_C + 1] >> 4) & 0x0f));
             r00 = r00 * 7;
-            window.Display("PACKING", false);
+            ui.Display("PACKING", false);
             addr = end;
             while (addr < r00)
             {

@@ -23,14 +23,15 @@ namespace Rc41.T_Printer
                 //                if (c < 32 || c > 126) c = '#';
                 printLine += c;
             }
-            window.Print(printLine, justify);
-            if (window.PrintToFile())
-            {
-                using (StreamWriter file = new StreamWriter("printer.txt", true))
-                {
-                    file.WriteLine(printLine);
-                }
-            }
+            ui.Print(printLine, justify);
+            // Note: PrintToFile functionality needs to be moved to UI layer
+            // if (ui.PrintToFile())
+            // {
+            //     using (StreamWriter file = new StreamWriter("printer.txt", true))
+            //     {
+            //         file.WriteLine(printLine);
+            //     }
+            // }
         }
     }
 }

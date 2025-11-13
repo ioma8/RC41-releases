@@ -120,7 +120,7 @@ namespace Rc41.T_Cpu
             nm.exponent[1] = (byte)(e % 10);
             StoreNumber(nm, R_X);
             ram[LIFT] = (byte)'E';
-            if (window.PrinterMode() != 'M' && window.PrinterOn())
+            if (ui.PrinterMode() != 'M' && ui.PrinterOn())
             {
                 buffer = Format(nm);
                 printer.Print(buffer, 'R');

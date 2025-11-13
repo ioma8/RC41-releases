@@ -33,14 +33,14 @@ namespace Rc41.T_Extended
                 entry += (char)ram[p + 6];
                 s = ram[p + 5] * 256 + ram[p + 4];
                 entry += $"{s:d3}";
-                window.Print(entry, 'L');
+                ui.Print(entry, 'L');
                 p -= 7;
                 p -= s * 7;
             }
             p /= 7;
             p -= 2;
             entry = $"{p}";
-            window.Print(entry, 'L');
+            ui.Print(entry, 'L');
             cpu.StoreNumber(new Number(p), Cpu.R_X);
         }
     }

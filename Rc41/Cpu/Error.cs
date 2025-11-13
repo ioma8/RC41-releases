@@ -14,11 +14,11 @@ namespace Rc41.T_Cpu
             {
                 ClearFlag(25);
                 ClearFlag(50);
-                window.Display(Display(), false);
+                ui.Display(Display(), false);
                 return;
             }
             errFlag = true;
-            window.Display(Display(), false);
+            ui.Display(Display(), false);
             running = false;
         }
     }

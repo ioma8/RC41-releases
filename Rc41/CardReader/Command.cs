@@ -31,7 +31,7 @@ namespace Rc41.T_CardReader
 
             if (function == 2)
             {                           // RDTA
-                filename = window.LoadCard();
+                filename = ui.LoadCard();
                 if (filename == null) return addr;
                 r00 = cpu.ram[Cpu.REG_C + 2] << 4 | cpu.ram[Cpu.REG_C + 1] >> 4 & 0x0f;
 
@@ -99,7 +99,7 @@ namespace Rc41.T_CardReader
                 s *= 7;
                 e *= 7;
                 len *= 7;
-                filename = window.LoadCard();
+                filename = ui.LoadCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.Open, FileAccess.ReadWrite);
                 if (file == null)
@@ -123,7 +123,7 @@ namespace Rc41.T_CardReader
 
             if (function == 5)
             {                           // VER
-                filename = window.LoadCard();
+                filename = ui.LoadCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.Open, FileAccess.ReadWrite);
                 if (file == null)
@@ -139,7 +139,7 @@ namespace Rc41.T_CardReader
 
             if (function == 6)
             {                           // WALL
-                filename = window.SaveCard();
+                filename = ui.SaveCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 if (file == null)
@@ -164,7 +164,7 @@ namespace Rc41.T_CardReader
 
             if (function == 7)
             {                           // WDTA
-                filename = window.SaveCard();
+                filename = ui.SaveCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 if (file == null)
@@ -228,7 +228,7 @@ namespace Rc41.T_CardReader
                 e += r00;
                 s *= 7;
                 e *= 7;
-                filename = window.SaveCard();
+                filename = ui.SaveCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 if (file == null)
@@ -252,7 +252,7 @@ namespace Rc41.T_CardReader
 
             if (function == 10)
             {                          // WSTS
-                filename = window.SaveCard();
+                filename = ui.SaveCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 if (file == null)

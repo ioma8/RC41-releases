@@ -1,4 +1,5 @@
 ﻿using Rc41.T_Cpu;
+using Rc41.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,14 @@ namespace Rc41.T_Extended
     public partial class Extended
     {
         Cpu cpu;
-        Form1 window;
+        ICalculatorUI ui;
         public byte[] ram;
         public int currentFile;
 
-        public Extended(Cpu c, Form1 window)
+        public Extended(Cpu c, ICalculatorUI calculatorUI)
         {
             cpu = c;
-            this.window = window;
+            this.ui = calculatorUI;
             ram = new byte[4200];
             for (var i = 0; i < 4200; i++) ram[i] = 0;
             ram[599 * 7 + 6] = 0xff;

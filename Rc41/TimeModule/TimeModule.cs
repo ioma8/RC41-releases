@@ -1,4 +1,5 @@
 ﻿using Rc41.T_Cpu;
+using Rc41.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Rc41.T_TimeModule
     public partial class TimeModule
     {
         Cpu cpu;
-        Form1 window;
+        ICalculatorUI ui;
         double offset;
         int clkmode;
         char clktd;
@@ -31,10 +32,10 @@ namespace Rc41.T_TimeModule
         int numEntry;
         int number;
 
-        public TimeModule(Cpu c, Form1 window)
+        public TimeModule(Cpu c, ICalculatorUI calculatorUI)
         {
             cpu = c;
-            this.window = window;
+            this.ui = calculatorUI;
             offset = 0;
             clkmode = 12;
             clktd = 'T';

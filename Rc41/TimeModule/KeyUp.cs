@@ -94,7 +94,7 @@ namespace Rc41.T_TimeModule
                         if (nextRcl > 0) nextRcl--;
                     }
                     swShift = false;
-                    window.Shift(false);
+                    ui.Shift(false);
                 }
                 else
                 {
@@ -114,7 +114,7 @@ namespace Rc41.T_TimeModule
                     }
                 }
                 SwDisplay();
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
                 return;
             }
             if (tag.Equals("44"))                     // BS
@@ -122,7 +122,7 @@ namespace Rc41.T_TimeModule
                 if (swShift)
                 {
                     cpu.ClearFlag(50);
-                    window.Shift(false);
+                    ui.Shift(false);
                     EndSw();
                     return;
                 }
@@ -130,7 +130,7 @@ namespace Rc41.T_TimeModule
                 {
                     swAccumulated = 0;
                     SwDisplay();
-                    window.Display(cpu.Display(), false);
+                    ui.Display(cpu.Display(), false);
                 }
             }
         }

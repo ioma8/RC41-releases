@@ -16,7 +16,7 @@ namespace Rc41.T_Cpu
                 ram[REG_R + 0] = keys[key].salpha;
                 if (ram[REG_R + 0] == 0x81) ram[REG_R + 0] = 0x7f;
                 ClearFlag(F_SHIFT);
-                window.Shift(false);
+                ui.Shift(false);
             }
             else
                 ram[REG_R + 0] = keys[key].alpha;
@@ -32,7 +32,7 @@ namespace Rc41.T_Cpu
                 ram[REG_R + 1] = 0xf1;
             }
             ProgramStep("");
-            window.Display(Display());
+            ui.Display(Display());
         }
 
         public void AlphaDown(int key)
@@ -57,18 +57,18 @@ namespace Rc41.T_Cpu
                     for (var i = REG_P + 6; i > REG_M; i--)
                         ram[i] = ram[i - 1];
                     ram[REG_M] = keys[key].salpha;
-                    window.Display(Display());
+                    ui.Display(Display());
                     ClearFlag(47);
-                    window.Shift(false);
+                    ui.Shift(false);
                 }
                 else
                 {
                     if (keys[key].salpha == 0x81)
                     {
                         SetFlag(F_ALPHA_IN);
-                        window.Display(Display());
+                        ui.Display(Display());
                         ClearFlag(47);
-                        window.Shift(false);
+                        ui.Shift(false);
                     }
                     if (keys[key].salpha == 0x86)
                     {
@@ -103,7 +103,7 @@ namespace Rc41.T_Cpu
                     for (var i = REG_P + 6; i > REG_M; i--)
                         ram[i] = ram[i - 1];
                     ram[REG_M] = keys[key].alpha;
-                    window.Display(Display());
+                    ui.Display(Display());
                 }
                 else
                 {
@@ -131,9 +131,9 @@ namespace Rc41.T_Cpu
                     {
                         if (FlagSet(22)) EndNumber();
                         running = true;
-                        window.RunTimerEnabled(true);
+                        ui.RunTimerEnabled(true);
                         goose = "\x81           ";
-                        window.Display(goose);
+                        ui.Display(goose);
                         return;
                     }
                 }
@@ -148,21 +148,21 @@ namespace Rc41.T_Cpu
                     for (var i = REG_M; i <= REG_P + 2; i++)
                         ram[i] = 0x00;
                     ClearFlag(F_ALPHA_IN);
-                    window.Display(Display());
+                    ui.Display(Display());
                 }
                 if (keys[key].salpha == 0x82)
                 {
                     SetupMode1(27);
                     ClearFlag(F_ALPHA);
                     ClearFlag(F_ALPHA_IN);
-                    window.Alpha(false);
+                    ui.Alpha(false);
                 }
                 if (keys[key].salpha == 0x83)
                 {
                     SetupMode1(23);
                     ClearFlag(F_ALPHA);
                     ClearFlag(F_ALPHA_IN);
-                    window.Alpha(false);
+                    ui.Alpha(false);
                 }
                 if (keys[key].salpha == 0x88)
                 {
@@ -170,11 +170,11 @@ namespace Rc41.T_Cpu
                     ram[REG_R + 0] = 0x00;
                     ClearFlag(F_ALPHA);
                     ClearFlag(F_ALPHA_IN);
-                    window.Alpha(false);
+                    ui.Alpha(false);
                     Execute();
                 }
                 ClearFlag(F_SHIFT);
-                window.Shift(false);
+                ui.Shift(false);
             }
             else
             {
@@ -195,7 +195,7 @@ namespace Rc41.T_Cpu
                             ram[i] = 0x00;
                         ClearFlag(F_ALPHA_IN);
                     }
-                    window.Display(Display());
+                    ui.Display(Display());
                 }
             }
         }

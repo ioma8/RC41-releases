@@ -10,12 +10,16 @@ using Rc41.T_CardReader;
 using Rc41.T_Cpu;
 using Rc41.T_Extended;
 using Rc41.T_TimeModule;
+using Rc41.Core.Interfaces;
 
 
 namespace Rc41
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, ICalculatorUI
     {
+        // Explicit interface implementation for DisplayTimer
+        System.Windows.Forms.Timer ITimerAdapter.DisplayTimer => DisplayTimer;
+        
         public Cpu cpu;
         public Debugger debugger;
         public Ui ui;

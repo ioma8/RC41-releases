@@ -33,7 +33,7 @@ namespace Rc41.T_TimeModule
                 cpu.Sto(x, nextSplit);
                 swHold = true;
                 SwDisplay();
-                window.Display(cpu.Display(), true);
+                ui.Display(cpu.Display(), true);
             }
         }
     }
