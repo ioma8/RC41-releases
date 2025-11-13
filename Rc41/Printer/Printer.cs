@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Rc41.T_Cpu;
+using Rc41.Core.Interfaces;
 
 namespace Rc41.T_Printer
 {
@@ -15,15 +16,15 @@ namespace Rc41.T_Printer
         int printPosition;
         string printBuffer;
         Cpu cpu;
-        Form1 window;
+        ICalculatorUI ui;
         public char printerMode { get; set; }
         public bool power { get; set; }
         public int arg { get; set; }
 
-        public Printer(Cpu c, Form1 window)
+        public Printer(Cpu c, ICalculatorUI calculatorUI)
         {
             cpu = c;
-            this.window = window;
+            this.ui = calculatorUI;
             printPosition = 0;
             printBuffer = "";
             power = true;

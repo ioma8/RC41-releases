@@ -12,8 +12,8 @@ namespace Rc41.T_TimeModule
         public void EndSw()
         {
             cpu.calculatorMode = Cpu.CM_DIRECT;
-            window.DisplayTimer.Interval = 500;
-            window.Display(cpu.Display(), true);
+            ui.SetDisplayTimerInterval(500);
+            ui.Display(cpu.Display(), true);
         }
     }
 }

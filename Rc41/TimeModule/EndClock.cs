@@ -14,7 +14,7 @@ namespace Rc41.T_TimeModule
             if (cpu.calculatorMode != Cpu.CM_CLOCK) return;
             cpu.calculatorMode = Cpu.CM_DIRECT;
             cpu.ClearFlag(50);
-            cpu.window.Display(cpu.Display(), false);
+            cpu.ui.Display(cpu.Display(), false);
         }
     }
 }

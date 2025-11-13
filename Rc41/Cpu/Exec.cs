@@ -27,7 +27,7 @@ namespace Rc41.T_Cpu
             cmd = 0;
             errFlag = false;
             while (cmd == 0) cmd = ram[addr--];
-            if (window.Trace()) window.Trace(DecodeInstruction(addr + 1));
+            if (ui.IsTraceEnabled()) ui.TraceMessage(DecodeInstruction(addr + 1));
             if (running == false && cmd == 0x54 && FlagSet(F_NUM_IN)) cmd = 0x1c;
             //            if (debug)
             //            {
@@ -66,7 +66,7 @@ namespace Rc41.T_Cpu
                     if (running)
                     {
                         goose = goose.Substring(11) + goose.Substring(0, 11);
-                        window.Display(goose, true);
+                        ui.Display(goose, true);
                     }
                     break;
 
@@ -1233,7 +1233,7 @@ namespace Rc41.T_Cpu
                 case 0x7e:                                             // AVIEW
                     Aview();
                     SetFlag(50);
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                     break;
                 case 0x7f:                                             // CLD
                     ClearFlag(F_MSG);
@@ -1260,7 +1260,7 @@ namespace Rc41.T_Cpu
                     ram[REG_E + 1] |= 0x0f;
                     ram[REG_E + 0] = 0xff;
                     Annunciators();
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                     break;
                 case 0x85:                                             // RTN
                     addr = Rtn(addr);
@@ -1303,7 +1303,7 @@ namespace Rc41.T_Cpu
                 case 0x8e:                                             // PROMPT
                     Aview();
                     running = false;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                     break;
                 case 0x8f:                                             // ADV
                     if (FlagSet(F_PRT_EXIST) && FlagSet(F_PREN))
@@ -1501,14 +1501,14 @@ namespace Rc41.T_Cpu
                             running = true;
                             for (i = 0; i < 7; i++) ram[REG_A + i] = 0;
                             for (i = 2; i < 7; i++) ram[REG_B + i] = 0;
-                            window.RunTimerEnabled(true);
+                            ui.RunTimerEnabled(true);
                             goose = "\x81           ";
-                            window.Display(goose, true);
+                            ui.Display(goose, true);
                         }
 
 //                        Push((oaddr) - isize(oaddr - 1));
 //                        running = true;
-//                        window.RunTimerEnabled(true);
+//                        ui.RunTimerEnabled(true);
                     }
                     break;
 
@@ -1581,7 +1581,7 @@ namespace Rc41.T_Cpu
                     if (running)
                     {
                         goose = goose.Substring(11) + goose.Substring(0, 11);
-                        window.Display(goose, true);
+                        ui.Display(goose, true);
                     }
                     addr--;
                     break;
@@ -1643,9 +1643,9 @@ namespace Rc41.T_Cpu
                             running = true;
                             for (i = 0; i < 7; i++) ram[REG_A + i] = 0;
                             for (i = 2; i < 7; i++) ram[REG_B + i] = 0;
-                            window.RunTimerEnabled(true);
+                            ui.RunTimerEnabled(true);
                             goose = "\x81           ";
-                            window.Display(goose, true);
+                            ui.Display(goose, true);
                         }
                     }
                     break;
@@ -1710,7 +1710,7 @@ namespace Rc41.T_Cpu
             //                fgets(buffer, 2, stdin);
             //            }
             errFlag = false;
-            if (window.Trace()) window.TraceRegs();
+            if (ui.IsTraceEnabled()) ui.TraceRegs();
             return addr;
         }
 

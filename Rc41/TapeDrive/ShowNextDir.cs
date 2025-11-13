@@ -13,11 +13,11 @@ namespace Rc41.T_TapeDrive
             if (dirPos >= dir.Count)
             {
                 var line = $"FREE: {dfree}/{sfree}";
-                window.ToPrinter(line, 'L');
+                ui.Print(line, 'L');
                 return false;
             }
-            window.Display(dir[dirPos].Substring(0, 12), false);
-            window.Print(dir[dirPos], 'L');
+            ui.Display(dir[dirPos].Substring(0, 12), false);
+            ui.Print(dir[dirPos], 'L');
             cpu.SetAlpha(dir[dirPos++]);
             return true;
         }

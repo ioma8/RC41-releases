@@ -11,7 +11,7 @@ namespace Rc41.T_TimeModule
         public void SwShift()
         {
             swShift = !swShift;
-            window.Shift(swShift);
+            ui.Shift(swShift);
         }
     }
 }

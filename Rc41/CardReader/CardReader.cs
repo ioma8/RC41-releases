@@ -6,19 +6,19 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Rc41.T_Cpu;
+using Rc41.Core.Interfaces;
 
 namespace Rc41.T_CardReader
 {
     public partial class CardReader
     {
-        Form1 window;
+        ICalculatorUI ui;
         Cpu cpu;
 
-        public CardReader(Cpu c, Form1 w)
+        public CardReader(Cpu c, ICalculatorUI calculatorUI)
         {
-            window = w;
+            ui = calculatorUI;
             cpu = c;
         }
 

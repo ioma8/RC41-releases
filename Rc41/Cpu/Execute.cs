@@ -20,7 +20,7 @@ namespace Rc41.T_Cpu
             if (ram[REG_R + 1] == 0x00 && ram[REG_R + 0] == CMD_PACK)
             {
                 Pack();
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
                 return;
             }
 
@@ -94,15 +94,15 @@ namespace Rc41.T_Cpu
                 if (ram[REG_R + 1] >= 0x10 && ram[REG_R + 1] <= 0x1c)
                 {
                     AddNumber((char)(ram[REG_R + 1] - 0x10));
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                     return;
                 }
                 ProgramStep("");
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
                 return;
             }
 
-            if (window.PrinterMode() != 'M' && window.PrinterOn())
+            if (ui.PrinterMode() != 'M' && ui.PrinterOn())
             {
                 if (ram[REG_R + 1] < 0x10 || ram[REG_R + 1] > 0x1c)
                 {
@@ -128,7 +128,7 @@ namespace Rc41.T_Cpu
                     ram[REG_E + 0] = 0xff;
                     ram[REG_E + 0] = 0xff;
                     ram[REG_E + 1] |= 0x0f;
-                    window.Display(Display(), true);
+                    ui.Display(Display(), true);
                     return;
                 }
             }
@@ -154,9 +154,9 @@ namespace Rc41.T_Cpu
                     running = true;
                     ram[REG_E + 0] = 0xff;
                     ram[REG_E + 1] |= 0x0f;
-                    window.RunTimerEnabled(true);
+                    ui.RunTimerEnabled(true);
                     goose = "\x81           ";
-                    window.Display(goose, true);
+                    ui.Display(goose, true);
                     return;
                 }
 
@@ -164,7 +164,7 @@ namespace Rc41.T_Cpu
 
             if (ram[REG_R + 1] == 0xc1)
             {
-                window.Display(Display(), true);
+                ui.Display(Display(), true);
                 Annunciators();
                 return;
             }
@@ -189,7 +189,7 @@ namespace Rc41.T_Cpu
                 ram[REG_E + 1] |= 0x0f;
             }
             Exec(71);
-            window.Display(Display(), true);
+            ui.Display(Display(), true);
             Annunciators();
         }
     }

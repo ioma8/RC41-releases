@@ -91,7 +91,7 @@ namespace Rc41.T_Cpu
                     uiMode = 0;
                 }
             }
-            window.Display(Display());
+            ui.Display(Display());
         }
         */
     }

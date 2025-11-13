@@ -7,17 +7,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Rc41.T_Cpu;
+using Rc41.Core.Interfaces;
 
 namespace Rc41
 {
     public class Debugger
     {
-        Form1 window;
+        ICalculatorUI ui;
         Cpu cpu;
 
-        public Debugger(Form1 w, Cpu c)
+        public Debugger(ICalculatorUI calculatorUI, Cpu c)
         {
-            window = w;
+            ui = calculatorUI;
             cpu = c;
         }
 
@@ -27,7 +28,7 @@ namespace Rc41
             int j;
             int b;
             string line;
-            window.DebugPrint("");
+            ui.DebugPrint("");
             b = (cpu.ram[Cpu.REG_C + 2] << 4) + ((cpu.ram[Cpu.REG_C + 1] >> 4) & 0x0f);
             from += b;
             to += b;
@@ -42,7 +43,7 @@ namespace Rc41
                 line = $"{i - b:d3}:";
                 for (j = 6; j >= 0; j--)
                     line += $" {cpu.ram[i * 7 + j]:X2}";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
             }
         }
         public void ShowEregs(int from, int to)
@@ -50,7 +51,7 @@ namespace Rc41
             int i;
             int j;
             string line;
-            window.DebugPrint("");
+            ui.DebugPrint("");
             if (from > 599) from = 599;
             if (to > 599) to = 599;
             if (to > from)
@@ -63,14 +64,14 @@ namespace Rc41
                 for (j = 6; j >= 0; j--)
                     line += $" {cpu.extended.ram[i * 7 + j]:X2}";
                 line += $"  [{i * 7:X3}]";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
             }
 
         }
         public void ShowFlags()
         {
             string line;
-            window.DebugPrint("");
+            ui.DebugPrint("");
             line = "";
             if ((cpu.ram[Cpu.REG_D + 6] & 0x80) != 0) line += "00:* "; else line += "00:- ";
             if ((cpu.ram[Cpu.REG_D + 6] & 0x40) != 0) line += "01:* "; else line += "01:- ";
@@ -84,7 +85,7 @@ namespace Rc41
             if ((cpu.ram[Cpu.REG_D + 5] & 0x40) != 0) line += "09:* "; else line += "09:- ";
             if ((cpu.ram[Cpu.REG_D + 5] & 0x20) != 0) line += "10:* "; else line += "10:- ";
             if ((cpu.ram[Cpu.REG_D + 5] & 0x10) != 0) line += "11:* "; else line += "11:- ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             line = "";
             if ((cpu.ram[Cpu.REG_D + 5] & 0x08) != 0) line += "12:* "; else line += "12:- ";
             if ((cpu.ram[Cpu.REG_D + 5] & 0x04) != 0) line += "13:* "; else line += "13:- ";
@@ -98,7 +99,7 @@ namespace Rc41
             if ((cpu.ram[Cpu.REG_D + 4] & 0x04) != 0) line += "21:* "; else line += "21:- ";
             if ((cpu.ram[Cpu.REG_D + 4] & 0x02) != 0) line += "22:* "; else line += "22:- ";
             if ((cpu.ram[Cpu.REG_D + 4] & 0x01) != 0) line += "23:* "; else line += "23:- ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             line = "";
             if ((cpu.ram[Cpu.REG_D + 3] & 0x80) != 0) line += "24:* "; else line += "24:- ";
             if ((cpu.ram[Cpu.REG_D + 3] & 0x40) != 0) line += "25:* "; else line += "25:- ";
@@ -112,7 +113,7 @@ namespace Rc41
             if ((cpu.ram[Cpu.REG_D + 2] & 0x40) != 0) line += "33:* "; else line += "33:- ";
             if ((cpu.ram[Cpu.REG_D + 2] & 0x20) != 0) line += "34:* "; else line += "34:- ";
             if ((cpu.ram[Cpu.REG_D + 2] & 0x10) != 0) line += "35:* "; else line += "35:- ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             line = "";
             if ((cpu.ram[Cpu.REG_D + 2] & 0x08) != 0) line += "36:* "; else line += "36:- ";
             if ((cpu.ram[Cpu.REG_D + 2] & 0x04) != 0) line += "37:* "; else line += "37:- ";
@@ -126,7 +127,7 @@ namespace Rc41
             if ((cpu.ram[Cpu.REG_D + 1] & 0x04) != 0) line += "45:* "; else line += "45:- ";
             if ((cpu.ram[Cpu.REG_D + 1] & 0x02) != 0) line += "46:* "; else line += "46:- ";
             if ((cpu.ram[Cpu.REG_D + 1] & 0x01) != 0) line += "47:* "; else line += "47:- ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             line = "";
             if ((cpu.ram[Cpu.REG_D + 0] & 0x80) != 0) line += "48:* "; else line += "48:- ";
             if ((cpu.ram[Cpu.REG_D + 0] & 0x40) != 0) line += "49:* "; else line += "49:- ";
@@ -136,33 +137,33 @@ namespace Rc41
             if ((cpu.ram[Cpu.REG_D + 0] & 0x04) != 0) line += "53:* "; else line += "53:- ";
             if ((cpu.ram[Cpu.REG_D + 0] & 0x02) != 0) line += "54:* "; else line += "54:- ";
             if ((cpu.ram[Cpu.REG_D + 0] & 0x01) != 0) line += "55:* "; else line += "55:- ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
         }
 
         public void ShowInfo()
         {
             int value;
             string line;
-            window.DebugPrint("");
+            ui.DebugPrint("");
             value = (cpu.ram[Cpu.REG_C + 6] << 4) | ((cpu.ram[Cpu.REG_C + 5] >> 4) & 0x0f);
             line = $"Stat     : {value:d4}  (${value:X4})";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             value = (cpu.ram[Cpu.REG_C + 2] << 4) | ((cpu.ram[Cpu.REG_C + 1] >> 4) & 0x0f);
             line = $"R00      : {value:d4}  (${value:X4})";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             value = ((cpu.ram[Cpu.REG_C + 1] & 0x0f) << 8) | cpu.ram[Cpu.REG_C + 0];
             line = $".END.    : {value:d4}  (${value:X4})";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             value = ((cpu.ram[Cpu.REG_E + 1] & 0x0f) << 8) | cpu.ram[Cpu.REG_E + 0];
             line = $"Line #   : {value:d4}  (${value:X4})";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             value = ((cpu.ram[Cpu.REG_B + 1] & 0x0f) << 8) | cpu.ram[Cpu.REG_B + 0];
             value *= 7;
             value += ((cpu.ram[Cpu.REG_B + 1] & 0xf0) >> 4);
             line = $"Addr     : {value:d4}  (${cpu.ram[Cpu.REG_B + 1]:X2}{cpu.ram[Cpu.REG_B + 0]:X2})";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
             line = $"EM: CurrentFile: {cpu.extended.currentFile}  {cpu.extended.currentFile:X2}";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
         }
 
         public void ShowRegs(int from, int to)
@@ -170,7 +171,7 @@ namespace Rc41
             int i;
             int j;
             string line;
-            window.DebugPrint("");
+            ui.DebugPrint("");
             if (from > 0x1ff) from = 0x1ff;
             if (to > 0x1ff) to = 0x1ff;
             if (to > from)
@@ -188,7 +189,7 @@ namespace Rc41
                     if (cpu.ram[i * 7 + j] > 32 && cpu.ram[i * 7 + j] < 128) line += $"{(char)cpu.ram[i * 7 + j]}";
                     else line += ".";
                 }
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
             }
         }
 
@@ -197,91 +198,91 @@ namespace Rc41
             int i;
             string line;
 
-            window.DebugPrint("");
+            ui.DebugPrint("");
 
             if (!stackOnly)
             {
                 line = " e: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_E + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " d: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_D + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " c: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_C + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " b: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_B + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " a: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_A + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = "|-: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_R + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " Q: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_Q + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " P: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_P + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " O: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_O + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " N: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_N + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
                 line = " M: ";
                 for (i = 6; i >= 0; i--)
                     line += $"{cpu.ram[Cpu.REG_M + i]:X2} ";
-                window.DebugPrint(line);
+                ui.DebugPrint(line);
 
             }
 
             line = " L: ";
             for (i = 6; i >= 0; i--)
                 line += $"{cpu.ram[Cpu.REG_L + i]:X2} ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
 
             line = " X: ";
             for (i = 6; i >= 0; i--)
                 line += $"{cpu.ram[Cpu.REG_X + i]:X2} ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
 
             line = " Y: ";
             for (i = 6; i >= 0; i--)
                 line += $"{cpu.ram[Cpu.REG_Y + i]:X2} ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
 
             line = " Z: ";
             for (i = 6; i >= 0; i--)
                 line += $"{cpu.ram[Cpu.REG_Z + i]:X2} ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
 
             line = " T: ";
             for (i = 6; i >= 0; i--)
                 line += $"{cpu.ram[Cpu.REG_T + i]:X2} ";
-            window.DebugPrint(line);
+            ui.DebugPrint(line);
 
         }
 

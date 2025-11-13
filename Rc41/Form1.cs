@@ -10,11 +10,12 @@ using Rc41.T_CardReader;
 using Rc41.T_Cpu;
 using Rc41.T_Extended;
 using Rc41.T_TimeModule;
+using Rc41.Core.Interfaces;
 
 
 namespace Rc41
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, ICalculatorUI
     {
         public Cpu cpu;
         public Debugger debugger;
@@ -517,6 +518,11 @@ namespace Rc41
             DisplayTimer.Enabled = b;
         }
 
+        public void SetDisplayTimerInterval(int intervalMs)
+        {
+            DisplayTimer.Interval = intervalMs;
+        }
+
         public char PrinterMode()
         {
             if (pm_Man.Checked) return 'M';
@@ -528,11 +534,6 @@ namespace Rc41
         public bool PrinterOn()
         {
             return PrinterPowerOn.Checked;
-        }
-
-        public void ToPrinter(string line, char justify)
-        {
-            cpu.printer.Print(line, justify);
         }
 
         private void DebugButton_Click(object sender, EventArgs e)
@@ -671,7 +672,7 @@ namespace Rc41
             }
         }
 
-        public string LoadCard()
+        public string? LoadCard()
         {
             DialogResult result;
             result = LoadCardDialog.ShowDialog();
@@ -680,7 +681,7 @@ namespace Rc41
             return null;
         }
 
-        public string SaveCard()
+        public string? SaveCard()
         {
             DialogResult result;
             result = SaveCardDialog.ShowDialog();
@@ -1013,12 +1014,12 @@ namespace Rc41
             if (cpu.GetKaFlag(0x40)) l_Rs.Text = GetUserLabel(0x40);
         }
 
-        public void Trace(string msg)
+        public void TraceMessage(string msg)
         {
             DebugOutput.AppendText(msg + "\r\n");
         }
 
-        public bool Trace()
+        public bool IsTraceEnabled()
         {
             return cb_Trace.Checked;
         }

@@ -64,7 +64,7 @@ namespace Rc41.T_TapeDrive
                         r = sector[p + 10] << 8 | sector[p + 11];
                         line += $"{r:d4}";
                         dir.Add(line);
-//                        window.ToPrinter(line, 'L');
+//                        ui.ToPrinter(line, 'L');
                     }
                     else if (sector[p] == 0x00) dfree++;
                     else if (sector[p] == 0xff)
@@ -87,8 +87,8 @@ namespace Rc41.T_TapeDrive
                 }
             }
 
-            window.Print("", 'L');
-            window.Print("NAME    TYPE    REGS", 'L');
+            ui.Print("", 'L');
+            ui.Print("NAME    TYPE    REGS", 'L');
             dirPos = 0;
             cpu.dirMode = true;
         }
