@@ -28,7 +28,7 @@ namespace Rc41.T_CardReader
                 MessageBox.Show($"Could not open card file: {filename}");
                 return;
             }
-            file.Read(card, 0, 7);
+            file.ReadExactly(card, 0, 7);
             len = card[5] << 8 | card[6];
             //    regs = (len + 6) / 7;
             cpu.GtoEnd();
@@ -41,7 +41,7 @@ namespace Rc41.T_CardReader
                 nabc = cpu.ToPtr(address);
                 cpu.ram[Cpu.REG_B + 1] = (byte)(nabc >> 8 & 0xff);
                 cpu.ram[Cpu.REG_B + 0] = (byte)(nabc & 0xff);
-                file.Read(buffer);
+                file.ReadExactly(buffer);
                 cpu.ProgramByte(buffer[0]);
                 address--;
                 len--;

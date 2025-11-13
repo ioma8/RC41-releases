@@ -23,8 +23,8 @@ namespace Rc41.T_CardReader
             }
             len = Cpu.RAMTOP;
             len *= 7;
-            file.Read(card, 0, 5);
-            file.Read(cpu.ram, 5, len);
+            file.ReadExactly(card, 0, 5);
+            file.ReadExactly(cpu.ram, 5, len);
             file.Close();
         }
     }

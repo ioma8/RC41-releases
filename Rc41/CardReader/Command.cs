@@ -39,7 +39,7 @@ namespace Rc41.T_CardReader
 
                 len = Cpu.RAMTOP - r00;
                 r00 *= 7;
-                file.Read(card, 0, 5);
+                file.ReadExactly(card, 0, 5);
 
                 if (card[0] != 'D')
                 {
@@ -47,7 +47,7 @@ namespace Rc41.T_CardReader
                 }
                 else
                 {
-                    file.Read(cardBuffer, 5, len);
+                    file.ReadExactly(cardBuffer, 5, len);
                     for (i = 0; i < len; i++)
                         cpu.ram[r00 + i] = cardBuffer[i];
                 }
@@ -97,14 +97,14 @@ namespace Rc41.T_CardReader
                 filename = ui.LoadCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.Open, FileAccess.ReadWrite);
-                file.Read(card, 0, 5);
+                file.ReadExactly(card, 0, 5);
                 if (card[0] != 'D')
                 {
                     cpu.Message("CARD ERR");
                 }
                 else
                 {
-                    file.Read(cardBuffer, 5, len);
+                    file.ReadExactly(cardBuffer, 5, len);
                     for (i = 0; i < len; i++)
                         cpu.ram[s + i] = cardBuffer[i];
                 }
@@ -116,7 +116,7 @@ namespace Rc41.T_CardReader
                 filename = ui.LoadCard();
                 if (filename == null) return addr;
                 file = File.Open(filename, FileMode.Open, FileAccess.ReadWrite);
-                file.Read(card, 0, 5);
+                file.ReadExactly(card, 0, 5);
                 cpu.Message($"TYPE {(char)card[0]} TR 01");
                 file.Close();
             }

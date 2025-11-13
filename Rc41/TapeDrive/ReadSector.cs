@@ -14,7 +14,7 @@ public partial class TapeDrive
         {
             sectorNumber = s;
             tapefile!.Seek(s * 256, SeekOrigin.Begin);
-            tapefile.Read(sector);
+            tapefile.ReadExactly(sector);
             written = false;
         }
     }
